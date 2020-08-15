@@ -79,7 +79,7 @@ const searching = document.getElementById("searching");
 
 const config = {
   height: 600,
-  width: 900,
+  width: 700,
   base: [0, 0, -2000, 0, 0, 0],
   loadMusic: [, , , 17, 16],
   four: [, , , 21, , , 21, , , 21, , 24],

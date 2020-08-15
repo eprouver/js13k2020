@@ -1,3 +1,8 @@
+/* @font-face {
+  font-family: emoji;
+  src: url(//xem.github.io/emoji/noto.ttf), url(//xem.github.io/emoji/twemoji.ttf);
+} */
+
 html, body {
   overflow: hidden;
   width: 100vw;
@@ -13,6 +18,7 @@ body {
   display: flex;
   justify-content: center;
   transition: background 1s ease;
+  filter: url(#blur);
 }
 
 button {
@@ -26,6 +32,11 @@ button {
   font: inherit;
   line-height: normal;
   -webkit-appearance: none;
+
+}
+
+svg#defs {
+  display:none;
 }
 
 /* start minimap */
@@ -90,7 +101,7 @@ button {
   position:absolute;
   border: 1px solid #777;
   top: 0;
-  border-style: dashed;
+  border-style: dotted;
   box-sizing: border-box;
   transition: all 0.25s ease;
 }
@@ -132,6 +143,7 @@ button {
   content: '👀';
   background: none;
   font-size: 1em;
+  filter:none;
 }
 
 #bar-holder {
@@ -164,6 +176,7 @@ button {
   transform: scale(0);
   opacity: 0;
   border-style: dashed;
+  pointer-events: none;
 }
 
 #searching.expand {
@@ -213,7 +226,7 @@ button {
 #viewport {
   position: absolute;
   transform-origin: left top;
-  transition: all 1200ms ease-in-out 0ms;
+  transition: all 600ms ease-in-out 100ms;
   transform-style: preserve-3d;
 }
 
@@ -226,7 +239,7 @@ button {
   position: absolute;
   width: 605px;
   height: 500px;
-  font-family: helvetica, arial, sans-serif;
+  font-family: emoji, helvetica, arial, sans-serif;
   transition: all 1000ms ease-in-out 0ms;
   padding: 20px;
   text-align: center;
@@ -235,28 +248,27 @@ button {
 
 .slide.failed {
   background: #a11;
-  border: 5px solid black;
-  transition: opacity 0.25s ease, background 120ms ease,
+  border: 5px solid red;
+  transition: opacity 0.25s ease, background 400ms ease,
   border 120ms ease;
 }
 
 .slide.finished {
   background: #148;
   border: 5px solid #00356b;
-  transition: opacity 0.25s ease, background 120ms ease,
+  transition: opacity 0.25s ease, background 400ms ease,
   border 120ms ease;
   text-shadow: 2px 2px 0 #00356b;
 }
 
 .slide.playing {
-  border: 5px solid cyan;
+  border: 5px solid #fbfbd7;
   background: #ccc;
 }
 
 .slide.loading {
-  border: 5px solid #ff00ff;
+  border: 50px solid yellow;
   opacity: 1;
-  background: rgba(255, 0, 255, 0.3);
   transition: background 1s ease, border 100ms ease;
 }
 
@@ -316,4 +328,9 @@ h2 {
   font-size: 100px;
   width: 100%;
   margin-top: 30px;
+}
+
+.slide.playing.instructions {
+  border: 5px solid #19eded;
+  filter:url(#turb);
 }
