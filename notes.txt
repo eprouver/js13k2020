@@ -1,0 +1,13 @@
+matching, flip to fomd matching cards
+* simon, follow the pattern
+* catch the falling shapes
+type the words
+* avoid the obstacles
+* tap to jump
+space invaders (drag a constantly shooting ship)
+puzzle pieces, arrange the pieces
+sort shapes into colored areas
+catch 'n' x icons & avoid the y icons
+find the jack / shuffle the cups
+
+parseFloat((Math.cos(0 - (Math.PI)) + 1).toPrecision(3))

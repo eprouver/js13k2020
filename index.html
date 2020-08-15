@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JS13K</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="searching"></div>
+<div id="container"  style="transform: scale(0) rotateY(90deg) rotateZ(90deg)">
+
+  <div id="viewport">
+    <div id="title" class="slide playing">
+      <h2>Title</h2>
+      <p>Explaination</p>
+      <button id="start-button" onclick="viewport.style = viewportTransform([1000,0,0,0,90,90]); play(config.loadMusic);">Next</button>
+      <a class="toggle-sound" onclick="toggleSound()">🔊</a>
+    </div>
+
+    <div class="slide playing" style="transform: translate(-50%, -50%) translate3d(1000px, 0px, 0px) rotateX(0deg) rotateY(90deg) rotateZ(90deg);">
+      <p>More Explaination</p>
+      <button id="start-button" onclick="reset(true); nextSlide();  play(config.start);">Start</button>
+      <a class="toggle-sound" onclick="toggleSound()">🔊</a>
+    </div>
+  </div>
+</div>
+
+<div id="bar-holder" onclick="this.classList.toggle('show')">
+  <div id="bar">
+  </div>
+</div>
+
+<a class="toggle-sound" onclick="toggleSound()">🔊</a>
+<!-- partial -->
+  <script src="./shared.js"></script>
+  <script src="./script.js"></script>
+
+</body>
+</html>
