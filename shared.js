@@ -50,3 +50,9 @@ const play = (D) => {
     gain.setTargetAtTime(.0001,i*.1+.08,.005),
     stop(i*.1+.09)`);
 };
+
+setInterval(() => {
+  [].forEach.call(document.getElementsByClassName("remove-me"), (p) => {
+    p.parentNode.removeChild(p);
+  });
+}, 2000);

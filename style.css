@@ -2,11 +2,21 @@
   font-family: emoji;
   src: url(//xem.github.io/emoji/noto.ttf), url(//xem.github.io/emoji/twemoji.ttf);
 } */
+* {
+  box-sizing: border-box;
+}
 
 html, body {
+  position: fixed;
   overflow: hidden;
-  width: 100vw;
-  height: 100vh;
+  width: -moz-available;          /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+  height: -moz-available;          /* WebKit-based browsers will ignore this. */
+  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  height: fill-available;
+  max-height: 100vh;
+  max-width: 100vw;
 }
 
 body {
@@ -32,16 +42,15 @@ button {
   font: inherit;
   line-height: normal;
   -webkit-appearance: none;
-
 }
 
 svg#defs {
-  display:none;
+  display: none;
 }
 
 /* start minimap */
 #bar {
-  text-align:center;
+  text-align: center;
   height: 100%;
   width: 100%;
   display: flex;
@@ -51,8 +60,15 @@ svg#defs {
   transition: transform 0.25s ease;
 }
 
-#bar-holder:hover #bar, #bar-holder.active #bar, #bar-holder.show #bar{
+#bar-holder:hover #bar, #bar-holder.active #bar, #bar-holder.show #bar {
   transform: translateX(0);
+}
+
+#bar p {
+  color: white;
+  font-size: 18px;
+  line-height: 0px;
+  font-family: arial;
 }
 
 .branch {
@@ -63,7 +79,7 @@ svg#defs {
 }
 
 .leaves {
-  display:flex;
+  display: flex;
   flex-grow: 1;
 }
 
@@ -79,7 +95,7 @@ svg#defs {
 .leaf:before {
   content: '';
   top: 60%;
-  position:relative;
+  position: relative;
   width: 50%;
   height: 10px;
   max-height: 20%;
@@ -91,14 +107,14 @@ svg#defs {
 }
 
 .leaf.ended:before {
-   background: #f00;
-   top: 40%;
+  background: #f00;
+  top: 40%;
 }
 
 .leaf:after {
   content: '';
   height: 40%;
-  position:absolute;
+  position: absolute;
   border: 1px solid #777;
   top: 0;
   border-style: dotted;
@@ -143,7 +159,7 @@ svg#defs {
   content: '👀';
   background: none;
   font-size: 1em;
-  filter:none;
+  filter: none;
 }
 
 #bar-holder {
@@ -163,7 +179,6 @@ svg#defs {
 }
 
 /* end minimap */
-
 #searching {
   height: 1em;
   width: 1em;
@@ -209,12 +224,12 @@ svg#defs {
 }
 
 #container.winning .slide.finished,
-#container.winning .slide.failed, #container.winning .slide.dummy  {
+#container.winning .slide.failed, #container.winning .slide.dummy {
   display: none;
 }
 
 #container.playing .slide.finished,
-#container.playing .slide.failed, #container.playing .slide.dummy  {
+#container.playing .slide.failed, #container.playing .slide.dummy {
   opacity: 0;
   pointer-events: none;
 }
@@ -231,7 +246,7 @@ svg#defs {
 }
 
 #viewport.loading {
-  display:none;
+  display: none;
 }
 
 .slide {
@@ -246,19 +261,35 @@ svg#defs {
   font-size: 24px;
 }
 
+.slide-canvas, .slide .explode-copy {
+  position: absolute;
+  width: 605px;
+  height: 500px;
+  top: 0;
+  left: 0;
+  transition: transform ease-in-out, opacity ease-in, filter ease-out;
+  pointer-events: none;
+}
+
 .slide.failed {
   background: #a11;
   border: 5px solid red;
   transition: opacity 0.25s ease, background 400ms ease,
-  border 120ms ease;
+    border 120ms ease;
 }
 
 .slide.finished {
   background: #148;
+  color: #052040;
   border: 5px solid #00356b;
   transition: opacity 0.25s ease, background 400ms ease,
-  border 120ms ease;
+    border 120ms ease;
   text-shadow: 2px 2px 0 #00356b;
+}
+
+.slide.hidden {
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .slide.playing {
@@ -275,7 +306,6 @@ svg#defs {
 .slide.winning {
   background: #01ff70;
   box-shadow: 0 0 0 2000px #01ff70;
-  opacity: 0;
   transition: opacity 0.15s ease-in-out 2.5s, box-shadow 1s ease;
 }
 
@@ -284,7 +314,7 @@ svg#defs {
   position: absolute;
   font-size: 130px;
   top: 200px;
-  left: 150px;
+  left: 130px;
   animation: ease 0.5s infinite alternate bounce;
 }
 
@@ -293,7 +323,7 @@ svg#defs {
   position: absolute;
   font-size: 130px;
   top: 200px;
-  right: 150px;
+  right: 130px;
   transform: scaleX(-1);
   animation: ease 0.5s infinite alternate bounce;
 }
@@ -306,9 +336,11 @@ svg#defs {
   0% {
     margin-top: 0px;
   }
+
   50% {
     margin-top: -50px;
   }
+
   100% {
     margin-top: 0px;
   }
@@ -320,17 +352,24 @@ h1 {
 
 h2 {
   margin: 10px 0 20px 0;
-  font-size: 120px;
-  line-height: 100px;
+  font-size: 60px;
+  line-height: 80px;
+  letter-spacing: -2px;
+  color: #ca42ca;
+  text-shadow: 2px 2px 2px #5000ff;
+  transform: scale(1.2) rotate(6deg);
+  background: #222222;
+  box-shadow: 2px 2px 0 2px #bdbd0e, 0px 7px 10px rgba(0, 0, 0, 0.5);
+  margin-bottom: 36px;
 }
 
 #start-button {
-  font-size: 100px;
+  font-size: 40px;
   width: 100%;
   margin-top: 30px;
 }
 
 .slide.playing.instructions {
   border: 5px solid #19eded;
-  filter:url(#turb);
+  filter: url(#turb);
 }

@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0; user-scalable=yes;">
   <title>JS13K</title>
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -13,8 +13,11 @@
 
   <div id="viewport">
     <div id="title" class="slide playing instructions">
-      <h2>Title</h2>
-      <p>Explaination</p>
+      <h2>80's Movie Hacker</h2>
+      <p>Our mainframe is infected!</p>
+      <p>Play puzzles to follow the footprints of the bad guys.</p>
+      <p>Look for links and delete deadends!</p>
+      <p>You're the best hacker we've got in this film!</p>
       <button id="start-button" onclick="viewport.style = viewportTransform([1000,0,0,0,90,90]); play(config.loadMusic);">Next</button>
       <a class="toggle-sound" onclick="toggleSound()">🔊</a>
     </div>
@@ -29,6 +32,7 @@
 
 <div id="bar-holder" onclick="this.classList.toggle('show')">
   <div id="bar">
+    <p>Progress</p>
   </div>
 </div>
 

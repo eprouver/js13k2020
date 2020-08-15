@@ -11,3 +11,10 @@ catch 'n' x icons & avoid the y icons
 find the jack / shuffle the cups
 
 parseFloat((Math.cos(0 - (Math.PI)) + 1).toPrecision(3))
+
+Our mainframe is infected!
+Play the puzzles to follow the footprints of the virus.
+Look for links and delete deadends!
+You're the best 80's movie hacker this side of France!
+
+
