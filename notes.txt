@@ -1,5 +1,5 @@
-matching, flip to fomd matching cards
-* simon, follow the pattern
+
+
 * catch the falling shapes
 type the words
 * avoid the obstacles
@@ -7,10 +7,10 @@ type the words
 space invaders (drag a constantly shooting ship)
 puzzle pieces, arrange the pieces
 sort shapes into colored areas
-catch 'n' x icons & avoid the y icons
+
 find the jack / shuffle the cups
 
-parseFloat((Math.cos(0 - (Math.PI)) + 1).toPrecision(3))
+mastermind
 
 Our mainframe is infected!
 Play the puzzles to follow the footprints of the virus.
@@ -18,3 +18,14 @@ Look for links and delete deadends!
 You're the best 80's movie hacker this side of France!
 
 
+killer windmills
+toilets that don't flush
+soldiers with no bullets
+airports in the revolutionary war
+college football
+hurricains very wet from the standpoint of water
+obama spying
+antifa super soldiers
+abolishing the suburbs
+dimensia tests
+injecting disinfectant

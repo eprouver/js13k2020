@@ -9,11 +9,15 @@
 html, body {
   position: fixed;
   overflow: hidden;
-  width: -moz-available;          /* WebKit-based browsers will ignore this. */
-  width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  width: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
   width: fill-available;
-  height: -moz-available;          /* WebKit-based browsers will ignore this. */
-  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  height: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  height: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
   height: fill-available;
   max-height: 100vh;
   max-width: 100vw;
@@ -28,7 +32,6 @@ body {
   display: flex;
   justify-content: center;
   transition: background 1s ease;
-  filter: url(#blur);
 }
 
 button {
@@ -241,7 +244,7 @@ svg#defs {
 #viewport {
   position: absolute;
   transform-origin: left top;
-  transition: all 600ms ease-in-out 100ms;
+  transition: all 600ms ease-in-out;
   transform-style: preserve-3d;
 }
 
@@ -256,9 +259,30 @@ svg#defs {
   height: 500px;
   font-family: emoji, helvetica, arial, sans-serif;
   transition: all 1000ms ease-in-out 0ms;
-  padding: 20px;
   text-align: center;
   font-size: 24px;
+}
+
+@keyframes bcolor {
+    0% {
+        border-color: #19dcea
+    }
+
+    25% {
+        border-color: #b22cff
+    }
+
+    50% {
+        border-color: #ea2222
+    }
+
+    75% {
+        border-color: #f5be10
+    }
+
+    to {
+        border-color: #3bd80d
+    }
 }
 
 .slide-canvas, .slide .explode-copy {
@@ -359,17 +383,432 @@ h2 {
   text-shadow: 2px 2px 2px #5000ff;
   transform: scale(1.2) rotate(6deg);
   background: #222222;
-  box-shadow: 2px 2px 0 2px #bdbd0e, 0px 7px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 36px;
+  animation: 10s bcolor ease infinite;
+  border-right: 4px solid black;
+  border-bottom: 4px solid black;
 }
 
 #start-button {
   font-size: 40px;
-  width: 100%;
+  width: 60%;
   margin-top: 30px;
 }
 
 .slide.playing.instructions {
   border: 5px solid #19eded;
-  filter: url(#turb);
+  animation: 5s bcolor ease infinite;
+  padding: 20px;
+}
+
+.game {
+  width: 595px;
+  height: 440px;
+  position: relative;
+  overflow: hidden;
+
+  font-size: 50px;
+  background: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#taptap .piece {
+  height: 1em;
+  width: 1em;
+  position: absolute;
+  transition: left linear, top linear;
+  border-radius: 1em;
+  cursor: pointer;
+}
+#taptap .piece.bad:before {
+  content: "💣";
+}
+#taptap .piece.good:before {
+  content: "⭐";
+}
+#taptap .piece.left {
+  left: -20%;
+  margin-left: -1em;
+}
+#taptap .piece.right {
+  left: 120%;
+  margin-left: 0;
+}
+
+#flipper .row {
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-around;
+  transform: translateZ(60px);
+}
+#flipper .piece {
+  width: 30%;
+  text-align: center;
+  border: 2px solid black;
+  height: 90%;
+  background: purple;
+  box-shadow: inset 0 0 20px black;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  transition: 0.5s ease all;
+  transform: rotate3d(-1, 1, 0, 180deg);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+#flipper .piece:before {
+  content: '';
+  background: white;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  transform: translateZ(1px);
+}
+#flipper .piece.clicked {
+  pointer-events: none;
+  transform: rotate3d(-1, 1, 0, 0deg);
+  z-index: 1;
+}
+#flipper .piece div {
+  transform: translateZ(5px);
+}
+#flipper .piece.finished {
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate3d(0, 1, 0, 300deg) scale(2);
+}
+.game.disabled {
+  pointer-events: none;
+}
+#controls .c-holder {
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+}
+#controls .dial-pos, #controls .tog-holder {
+  position: relative;
+  height: 1.5em;
+  width: 1.5em;
+}
+#controls .tog-holder {
+  border: 2px solid #afafaf;
+  background: rgba(220, 220, 220, 0.65);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 6px 11px #444;
+}
+#controls .tog-holder {
+  text-align: center;
+  transform-style: preserve-3d;
+  transition: all 0.5s ease;
+}
+#controls .tog-holder.flipped {
+  transform: rotateY(180deg);
+}
+#controls .tog-holder.flipped .tog-back {
+  text-shadow: 0 0 0.1em white;
+}
+#controls .tog-holder.flipped .tog-front {
+  text-shadow: 0 0 0.1em black;
+}
+#controls .tog-holder .tog-front, #controls .tog-holder .tog-back {
+  position: absolute;
+  width: 100%;
+  line-height: 1.55em;
+  transition: text-shadow 0.5s ease 0.25s;
+}
+#controls .tog-holder .tog-front {
+  transform: translateZ(1px);
+  text-shadow: 0 0 0.1em white;
+}
+#controls .tog-holder .tog-back {
+  transform: translateZ(-1px) scaleX(-1);
+  text-shadow: 0 0 0.1em black;
+}
+#controls .control {
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+  justify-content: space-around;
+  flex-direction: column;
+  cursor: pointer;
+  align-items: center;
+  transition: none;
+  transform: translateZ(60px);
+}
+#controls .control.winner .dial, #controls .control.winner .key-button, #controls .control.winner .tog-holder {
+  transition: all 0.5s ease;
+  background: white;
+  box-shadow: 0 0 5px white;
+  border: 2px solid white;
+}
+#controls .control.winner .dial:before {
+  border-left: 0.5em solid white;
+}
+#controls .key-holder {
+  font-size: 0.4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1px;
+  transition: all 0.25s ease;
+}
+#controls .key-holder.emph .key-button {
+  background: yellow;
+}
+#controls .key-button {
+  font-size: 1.9em;
+  text-align: center;
+  margin: 0.06em;
+  flex-grow: 1;
+  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee,  0 5px 0 #888, 0 3px 7px black;
+  height: 1em;
+  line-height: 1em;
+  border-radius: 0.2em;
+  background: #afafaf;
+  transition: all 0.1s ease;
+}
+#controls .key-button:hover {
+  transform: translateY(5px);
+  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee,  0 0 0 #888;
+}
+#controls .key-row {
+  display: flex;
+  flex-direction: row;
+}
+#controls .dial-holder {
+  position: absolute;
+  display: flex;
+  left: -0.25em;
+  font-size: 0.65em;
+  align-self: center;
+  width: 3em;
+  height: 2.25em;
+}
+#controls .dial-holder div[class*="setting"] {
+  position: absolute;
+  font-size: 0.5em;
+  left: 3em;
+  border-radius: 1em;
+  height: 1em;
+  transition: all 0.25s ease;
+  line-height: 1.3em;
+}
+#controls .dial-holder .setting1 {
+  top: 0.05em;
+}
+#controls .dial-holder .setting2 {
+  top: 1.7em;
+  margin-left: 0.7em;
+}
+#controls .dial-holder .setting3 {
+  top: 3.15em;
+}
+#controls .dial-holder[data-setting="set_0"] .dial {
+  transform: rotate(-32deg);
+}
+#controls .dial-holder[data-setting="set_0"] .setting1 {
+  font-size: 1em;
+  margin-left: -1.5em;
+  margin-top: -0.5em;
+  text-shadow: 0 0 12px white, 0 0 12px white, 0 0 12px white;
+}
+#controls .dial-holder[data-setting="set_1"] .dial {
+  transform: rotate(10deg);
+}
+#controls .dial-holder[data-setting="set_1"] .setting2 {
+  font-size: 1em;
+  margin-top: -1.25em;
+  margin-left: -1.25em;
+  text-shadow: 0 0 12px white, 0 0 12px white, 0 0 12px white;
+}
+#controls .dial-holder[data-setting="set_2"] .dial {
+  transform: rotate(50deg);
+}
+#controls .dial-holder[data-setting="set_2"] .setting3 {
+  font-size: 1em;
+  margin-left: -1.75em;
+  margin-top: -1.5em;
+  text-shadow: 0 0 12px white, 0 0 12px white, 0 0 12px white;
+}
+#controls .dial {
+  position: absolute;
+  font-size: 0.75em;
+  top: 1.4em;
+  left: 0.2em;
+  margin-top: -0.9em;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 100%;
+  background: #ccc;
+  transform-origin: 50% 50%;
+  transition: transform 0.4s ease;
+  border: 2px solid black;
+  box-shadow: inset 0 0 10px #333, 0 0 10px #222;
+}
+#controls .dial:before {
+  content: "";
+  font-size: 1.5em;
+  top: 0.2em;
+  right: -0.45em;
+  position: absolute;
+  border-top: 0.25em solid transparent;
+  border-bottom: 0.25em solid transparent;
+  border-left: 0.5em solid black;
+  transform: rotate(-10deg);
+}
+
+#game-holder {
+  width: 500px;
+  height: 400px;
+  margin: 0 auto;
+}
+
+.game #score {
+  font-size: 10em;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+}
+
+#master-mind .rows-holder {
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  top: 0;
+  position: absolute;
+  font-size: 0.4em;
+  width: 100%;
+}
+#master-mind .row-holder {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  padding: 2.5px 0;
+  margin: 2.5px;
+  justify-content: space-around;
+  width: 100%;
+}
+#master-mind .slot,
+#master-mind .pen,
+#master-mind .prompt {
+  border: 2px solid #afafaf;
+  background: gainsboro;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 6px 11px #444;
+  line-height: 1.15em;
+  padding: 5px;
+}
+#master-mind .pen {
+  width: 5.2em;
+  height: 3.25em;
+  line-height: 1.2em;
+  text-align: left;
+  align-self: center;
+}
+#master-mind .slot-holder {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.5em;
+  margin: 5px;
+}
+#master-mind .slot {
+  width: 1.5em;
+  height: 1.5em;
+  margin: 0.15em;
+  text-align: center;
+}
+#master-mind .slot.guess {
+  cursor: pointer;
+}
+#master-mind .slot.active {
+  background: yellow;
+}
+#master-mind .tries {
+  width: 62%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 60%;
+  font-size: 0.25em;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+#master-mind .tries .row-holder {
+  transition: all 0.25s ease;
+}
+#master-mind .tries::-webkit-scrollbar {
+  display: none;
+}
+#master-mind .key-holder {
+  font-size: 0.25em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1px;
+  transition: all 0.25s ease;
+}
+#master-mind .key-button,
+#master-mind .submit {
+  font-size: 1.9em;
+  text-align: center;
+  margin: 0.06em;
+  flex-grow: 1;
+  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee, 0 5px 0 #888, 0 6px 8px 1px black;
+  height: 1em;
+  line-height: 1em;
+  border-radius: 0.2em;
+  background: #afafaf;
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+#master-mind .key-button:hover,
+#master-mind .submit:hover {
+  transform: translateY(5px);
+  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee, 0 0 0 #888;
+}
+#master-mind .key-row {
+  display: flex;
+  flex-direction: row;
+}
+#master-mind .prompt {
+  font-size: 0.24em;
+  text-align: center;
+  line-height: 0.75em;
+  top: -15px;
+  position: relative;
+}
+#master-mind .submit {
+  font-size: 0.4em;
+  text-align: center;
+  top: 5px;
+  position: relative;
+}
+#master-mind .control {
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  font-size: 1.75em;
+}
+
+.game-instruction {
+  background: white;
+  text-align: center;
+  line-height: 2em;
+  text-overflow: ellipsis;
+  height: 2em;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 595px;
+  font-family: Arial, sans-serif;
 }

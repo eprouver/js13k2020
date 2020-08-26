@@ -9,6 +9,7 @@
 <body>
 <!-- partial:index.partial.html -->
 <div id="searching"></div>
+
 <div id="container"  style="transform: scale(0) rotateY(90deg) rotateZ(90deg)">
 
   <div id="viewport">
@@ -38,30 +39,18 @@
 
 <a class="toggle-sound" onclick="toggleSound()">🔊</a>
 
-<!-- <svg id="defs">
+<svg id="defs">
   <defs>
   <filter id="turb">
         <feTurbulence id="turb-2" type="fractalNoise" baseFrequency="0.004" numOctaves="1" result="turbulence_1"></feTurbulence>
-        <feTile in="turbulence_1" result="pixelate-map" />
-        <feDisplacementMap id="turb-1" in="SourceGraphic" in2="pixelate-map" xChannelSelector="R" yChannelSelector="G" scale="50" result="pre-final"/>
-
+        <feDisplacementMap id="turb-1" in="SourceGraphic" in2="turbulence_1" xChannelSelector="R" yChannelSelector="G" scale="10" result="pre-final"/>
           <feComposite in="pre-final" in2="SourceGraphic" operator="in"></feComposite>
         </filter>
-
-         <animate
-            xlink:href="#turb-2"
-            id="anim-blur"
-            attributeName="baseFrequency"
-            from="0.004"
-            to="0"
-            dur="3s"
-            begin="1s"
-            fill="freeze"
-          />
       </devs>
-</svg> -->
+</svg>
 <!-- partial -->
   <script src="./shared.js"></script>
+  <script src="./games/games.js"></script>
   <script src="./script.js"></script>
 
 </body>

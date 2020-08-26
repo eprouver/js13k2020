@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0; user-scalable=yes;">
+  <title>JS13K</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+  html, body {
+    position: relative;
+    overflow: visible;
+    width: fill-available;
+    height: fill-available;
+    max-height: fit-content;
+    max-width: fit-content;
+  }
+
+  #test-holder {
+    display:flex;
+    flex-direction: column;
+  }
+
+  #test-holder > div {
+    margin: 30px;
+  }
+  </style>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="test-holder">
+<div id="game-1"></div>
+<div id="game-2"></div>
+<div id="game-3"></div>
+<div id="game-4"></div>
+</div>
+<!-- partial -->
+  <script src="../shared.js"></script>
+  <script src="./games.js"></script>
+  <script>
+    const game1 = document.getElementById('game-1');
+    const game2 = document.getElementById('game-2');
+    const game3 = document.getElementById('game-3');
+    const game4 = document.getElementById('game-4');
+    const myGame1 = new masterMind(game1, 3, 2);
+    const myGame2 = new taptap(game2, 3, 2);
+    const myGame3 = new controls(game3, 3, 2);
+    const myGame4 = new flipper(game4, 3, 2);
+    myGame1.start();myGame2.start();myGame3.start();myGame4.start();
+
+  </script>
+</body>
+</html>
