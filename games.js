@@ -30,10 +30,6 @@ class game {
     this.difficulty = difficulty;
     this.timer = document.getElementById('timer-holder');
     this.timePath = document.getElementById('timer-path');
-    this.timePath.onanimationend = () => {
-      if(!this.playing) return;
-      this.end(false);
-    }
     this.timeLimit = config.timeLimit;
   }
 
@@ -59,196 +55,17 @@ class game {
     this.timer.classList.remove('not-playing');
     setTimeout(() => {
       this.playing = true;
-      this.timePath.setAttribute('style', `animation: dash ${this.timeLimit}s linear 1s reverse;`)
+      this.timePath.setAttribute('style', `animation: dash ${this.timeLimit}s linear 1s reverse;`);
+
+      setTimeout(() => {
+        this.timePath.onanimationend = () => {
+          if(!this.playing) return;
+          this.end(false);
+        }
+      }, 500);
+
       this.game.setAttribute('style', 'transform: none');
     }, 1000);
-  }
-}
-
-class masterMind extends game {
-  constructor(container, difficulty, target) {
-    super(container, difficulty, target, 'master-mind', `Find the code: 🌕 = exact, 🌑 = right icon, wrong place`);
-  }
-
-  clickHandler(emo) {
-    const children = this.guessRow.slotHolder.children;
-    children[this.currentSlot].innerHTML = emo;
-    this.currentSlot += 1;
-    if (this.currentSlot >= children.length) {
-      this.currentSlot = 0;
-    }
-    this.pickSlot(this.currentSlot);
-  }
-
-  makeKeyPad() {
-    const holder = document.createElement("div");
-    holder.classList.add("control");
-
-    const keyHolder = document.createElement("div");
-    keyHolder.classList.add("key-holder");
-
-    const row1 = document.createElement("div");
-    row1.classList.add("key-row");
-    const row2 = document.createElement("div");
-    row2.classList.add("key-row");
-
-    this.emos.forEach((emo, i) => {
-      let button;
-      button = document.createElement("div");
-      button.innerHTML = emo;
-      button.classList.add("key-button");
-
-      button.addEventListener("click", (e) => {
-        this.clickHandler(emo);
-      });
-      if (i % 2 == 1) {
-        row2.append(button);
-      } else {
-        row1.append(button);
-      }
-    });
-    keyHolder.append(row1);
-    keyHolder.append(row2);
-
-    const prompt = document.createElement("div");
-    prompt.classList.add("prompt");
-    prompt.innerHTML = "ENTER GUESS:";
-    holder.append(prompt);
-
-    holder.append(keyHolder);
-
-    const answer = document.createElement("div");
-    answer.classList.add("submit");
-    answer.innerHTML = "SUBMIT";
-
-    answer.addEventListener("click", () => {
-      this.submit();
-    });
-    holder.append(answer);
-
-    return holder;
-  }
-
-  pickSlot(slot) {
-    const slots = this.guessRow.slotHolder.children;
-    [].forEach.call(slots, (c) => c.classList.remove("active"));
-    slots[slot].classList.add("active");
-
-    this.currentSlot = slot;
-  }
-
-  newRow(slots, guess = false) {
-    const holder = document.createElement("div");
-    holder.classList.add("row-holder");
-    const pen = document.createElement("div");
-    pen.classList.add("pen");
-    const slotHolder = document.createElement("div");
-    slotHolder.classList.add("slot-holder");
-    let slot;
-    for (let i = 0; i < slots; i++) {
-      slot = document.createElement("div");
-      slot.classList.add("slot");
-      slot.innerHTML = "❓";
-      if (guess) {
-        slot.addEventListener("click", () => {
-          this.pickSlot(i);
-        });
-        slot.classList.add("guess");
-      }
-      slotHolder.append(slot);
-    }
-    holder.append(pen);
-    holder.append(slotHolder);
-
-    return { holder, pen, slotHolder };
-  }
-
-  submit() {
-    this.disable();
-    this.guessRow.pen.innerHTML = "";
-    const slots = this.guessRow.slotHolder.children;
-    const answer = [].map.call(
-      this.guessRow.slotHolder.children,
-      (c) => c.innerHTML
-    );
-    let cows = 0;
-
-    answer.forEach((input, i) => {
-      if (this.correct.indexOf(input) === i) {
-        this.guessRow.pen.append("🌕");
-        cows += 1;
-      } else if (this.correct.indexOf(input) > -1) {
-        this.guessRow.pen.append("🌑");
-      }
-    });
-
-    if (cows === answer.length) {
-      this.end(true);
-      return;
-    } else {
-      this.target -= 1;
-      this.score.innerHTML = this.target;
-      if (this.target === 0) {
-        [].forEach.call(this.codeRow.slotHolder.children, (c, i) => {
-          c.innerHTML = this.correct[i];
-        });
-        setTimeout(() => {
-          this.end(false);
-        }, 2000);
-        return;
-      }
-    }
-    this.disable(false);
-
-    [].forEach.call(slots, (c) => {
-      c.classList.remove("active");
-      c.classList.remove("guess");
-    });
-    const oldHolder = this.guessRow.holder;
-    this.guessRow.holder.style.opacity = 0;
-    this.tries.prepend(this.guessRow.holder);
-    setTimeout(() => {
-      oldHolder.style.opacity = 1;
-    }, 100);
-
-    this.guessRow = this.newRow(this.guessLength, true);
-    this.rowsHolder.append(this.guessRow.holder);
-    this.guessRow.pen.innerHTML = "YOUR GUESS:";
-  }
-
-  setup(difficulty = 3) {
-    this.guessLength = difficulty;
-    this.emos = ["❤️", "💚", "🧡", "💙", "💛", "💜"];
-    this.correct = [];
-    for (let i = 0; i < difficulty; i++) {
-      this.correct.push(this.emos[~~(Math.random() * this.emos.length)]);
-    }
-
-    this.rowsHolder = document.createElement("div");
-    this.rowsHolder.classList.add("rows-holder");
-    this.codeRow = this.newRow(difficulty);
-    this.codeRow.pen.innerHTML = "THE CODE:";
-    this.rowsHolder.append(this.codeRow.holder);
-    this.guessRow = this.newRow(difficulty, true);
-    this.rowsHolder.append(this.guessRow.holder);
-    this.guessRow.pen.innerHTML = "YOUR GUESS:";
-
-    this.game.append(this.rowsHolder);
-
-    this.tries = document.createElement("div");
-    this.tries.classList.add("tries");
-    this.game.append(this.tries);
-
-    const keypad = this.makeKeyPad();
-    this.game.append(keypad);
-  }
-
-  start() {
-    super.start();
-    this.setup(this.difficulty);
-    this.score.innerHTML = this.target;
-    this.slotIndex = 0;
-    this.pickSlot(0);
   }
 }
 
@@ -264,6 +81,7 @@ class controls extends game {
 
   end(winner) {
     this.timePath.style.animationPlayState = 'paused';
+    this.lockmsg.classList.add('hidden');
     this.playing = false;
     if (winner) {
       this.disable();
@@ -296,6 +114,8 @@ class controls extends game {
   }
 
   addScore(plus = 1) {
+    this.timePath.style.animationPlayState = 'paused';
+    this.lockmsg.classList.remove('hidden');
     this.current += plus;
     this.score.innerText = this.current;
 
@@ -316,6 +136,7 @@ class controls extends game {
         say(icon);
         this.targetSeq.shift();
         if (this.targetSeq.length == 0) {
+          this.timePath.style.animationPlayState = 'paused';
           this.addScore();
         } else {
           this.instructions.innerText = this.targetSeq.join(", ");
@@ -505,6 +326,7 @@ class controls extends game {
   }
 
   newSequence() {
+    this.lockmsg.classList.remove('hidden');
     this.timePath.style.animationPlayState = 'paused';
     this.loading = true;
     this.targetSeq = [];
@@ -521,6 +343,7 @@ class controls extends game {
     setTimeout(() => {
       this.resetAll();
       setTimeout(() => {
+        this.lockmsg.classList.add('hidden');
         say('go');
         this.disable(false);
         this.timePath.style.animationPlayState = 'running';
@@ -529,8 +352,11 @@ class controls extends game {
   }
 
   setup() {
+    this.lockmsg = document.createElement('div');
+    this.lockmsg.classList.add('lock-msg');
+    this.game.append(this.lockmsg);
     let thisRow, numRows = 0;
-    let numCtrls = (this.difficulty) + ~~(Math.random() * (this.difficulty / this.target));
+    let numCtrls = (this.difficulty) + ~~(Math.random() * (this.difficulty / this.target)) + (this.target * 0.35);
     this.keypad = false;
 
     while (numCtrls > 0 && numRows < 5) {
@@ -571,9 +397,9 @@ class controls extends game {
 
 class flipper extends game {
   constructor(container, difficulty = 4, target = 2) {
-    target = ~~Math.random(target * 2) + 1;
-    target = Math.min(Math.max(target, difficulty), 8);
-    difficulty = Math.max(target * 2, difficulty) + 1;
+    target = ~~(Math.random() * target * 0.6) + 2;
+    target = Math.min(target, 8);
+    difficulty = Math.max(target * 2, difficulty) + 2;
     super(container, difficulty, target, "flipper", `Find ${target} Pairs of Matching Symbols`);
     this.board = [];
     this.cards = remoji(Math.min(Math.ceil(target), Math.ceil(difficulty)));
@@ -595,10 +421,12 @@ class flipper extends game {
       </svg>`;
     //div.innerHTML = `<div>${piece}</div>`;
     div.classList.add("piece");
-    div.onclick = () => {
+    const clickstart = () => {
       say(piece);
       this.clickHandler(div, piece);
     };
+    div.onmousedown = clickstart.bind(this);
+    div.ontouchstart = clickstart.bind(this);
     return div;
   }
 
@@ -671,7 +499,7 @@ class flipper extends game {
 class taptap extends game {
   constructor(container, difficulty, target) {
     difficulty = Math.max(difficulty, 1) * 5;
-    target = Math.min(~~(Math.random() * target * 2) + 1, 12);
+    target = Math.min(~~(Math.random() * target * 2) + 2, 12);
     super(container, difficulty, target, 'taptap', `Click on ${target} ⭐ - Avoid the 💣`);
   }
 
