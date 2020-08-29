@@ -25,6 +25,12 @@ const config = {
   endingSpeed: 200,
   explodeScale: 2300,
   languages: [],
+  difficulties: [1, 1, 2],
+  targets: [1, 1, 1],
+  diftimes: 1.55,
+  tartimes: 1.75,
+  levelProgress: 2000,
+  timeLimit: 40,
 };
 
 const randBetween = (min, max) => {
@@ -48,7 +54,13 @@ const toggleSound = () => {
 };
 
 const selectNewVoice = () => {
-  config.lang = config.languages[randBetween(0, config.languages.length)];
+  const oldLang = config.lang;
+  let tries = 0;
+
+  while(config.lang === oldLang && tries < 3){
+    tries++;
+    config.lang = config.languages[randBetween(0, config.languages.length)];
+  }
   voice = window.speechSynthesis
        .getVoices()
        .filter((voice) => voice.lang.indexOf(config.lang) > -1);
@@ -65,7 +77,7 @@ const say = (m) => {
   msg.voice = voice;
   msg.volume = 3;
   msg.rate = 1.5;
-  msg.pitch = randBetween(1, 14) / 10;
+  msg.pitch = randBetween(3, 12) / 10;
   msg.text = m;
   msg.lang = config.lang;
   speechSynthesis.speak(msg);

@@ -126,12 +126,12 @@ function explode(c, times = 3) {
 
   setTimeout(function() {
     [].forEach.call(document.querySelectorAll("canvas.explode-copy"), (v, i) => {
-      v.style = `transition-duration: ${(Math.random() * 2000) + 500}ms;
-      filter: hue-rotate(180deg) brightness(2) saturate(0.2);
+      v.style = `transition-duration: ${(Math.random() * 5000) + 500}ms;
+      filter: hue-rotate(380deg) brightness(2) saturate(0.2);
       transform:
       translate3d(${randBetween(-config.explodeScale, config.explodeScale)}px,
        ${randBetween(-config.explodeScale, config.explodeScale)}px,
-        ${randBetween(-config.explodeScale, config.explodeScale)}px)
+        ${randBetween(-config.explodeScale, config.explodeScale * 3)}px)
         rotateX(${randBetween(-100, 100)}deg)
         rotateY(${randBetween(-100, 100)}deg)
         rotateZ(${randBetween(-100, 100)}deg)
@@ -184,9 +184,6 @@ const reset = (empty = true) => {
   if (empty) {
     removeAllChildren(viewport);
     config.winProgress *= config.progressDecay;
-    if (config.endingSpeed > 70) {
-      config.endingSpeed *= config.progressDecay;
-    }
     addBranch();
     addLeaf();
     dummySlides();
@@ -194,10 +191,14 @@ const reset = (empty = true) => {
 };
 
 const addContent = () => {
-  // ns.innerHTML = '<button onclick="nextSlide(true)">Passed</button> <button onclick="nextSlide(false)">Failed</button>';
-  let myGame = [masterMind, taptap, controls, flipper][~~(Math.random() * 4)];
+  const c = config.currentGame;
+  const games = [taptap, controls, flipper];
+  while(c === config.currentGame) {
+    config.currentGame = ~~(Math.random() * games.length);
+  }
 
-  myGame = new myGame(ns, 3, 2);
+  let myGame = games[config.currentGame];
+  myGame = new myGame(ns, ~~config.difficulties[config.currentGame], ~~config.targets[config.currentGame]);
   myGame.start();
 };
 
@@ -226,18 +227,25 @@ const nextSlide = (passed) => {
   if (ns) {
     ns.classList.remove("playing");
     if (!passed) {
+      config.timeLimit += 20;
       say("blocked");
       play(config.block);
       ns.classList.add("failed");
       ns.innerHTML = "<h1>😢</h1>";
       addLeaf();
-    } else if (progress < 2000) {
-      say("for oh for. dead end");
+    } else if (progress < config.levelProgress) {
+      config.difficulties[config.currentGame] *= config.diftimes;
+      config.targets[config.currentGame] *= config.tartimes;
+      config.timeLimit -= 2;
+      say("for oh for. null pointer");
       play(config.four);
       ns.classList.add("finished");
       ns.innerHTML = "<h1>404</h1>";
       progress += config.winProgress;
     } else {
+      config.timeLimit -= 10;
+      config.levelProgress *= 1.5;
+      config.targets = config.targets.map(t => t += 1);
       say( ["yess... continue", "good things", "Advance"][~~(Math.random() * 3)]);
       play(config.levelUp);
       ns.classList.add("winning");
@@ -269,7 +277,7 @@ const nextSlide = (passed) => {
   container.classList.add("loading");
   setTimeout(() => {
     viewport.classList.remove('loading');
-    container.style = `transform: scale(${config.size / (progress * config.zoomScaler / 850)})`;
+    container.style = `transform: scale(${config.size / (config.startProgress * config.zoomScaler / 850)})`;
   }, 5 * config.endingSpeed);
   setTimeout(() => {
     if (oldNS && passed) {
@@ -283,9 +291,10 @@ const nextSlide = (passed) => {
       oldNS.classList.add('hidden');
       explode(canvas, 1);
       play(config.explode);
+      say('deleted');
     }
 
-    const zoom = config.size / (progress * config.zoomScaler / 150);
+    const zoom = config.size / (config.startProgress * config.zoomScaler / 150);
     container.style = `transform: scale(${zoom})`;
   }, 18 * config.endingSpeed);
   if (!passed) {

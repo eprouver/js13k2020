@@ -28,10 +28,19 @@ class game {
     this.current = 0;
     this.playing = false;
     this.difficulty = difficulty;
+    this.timer = document.getElementById('timer-holder');
+    this.timePath = document.getElementById('timer-path');
+    this.timePath.onanimationend = () => {
+      if(!this.playing) return;
+      this.end(false);
+    }
+    this.timeLimit = config.timeLimit;
   }
 
   end(winner) {
+    this.timePath.style.animationPlayState = 'paused';
     this.playing = false;
+    this.timer.classList.add('not-playing');
     if (winner) {
       nextSlide(true);
     } else {
@@ -45,6 +54,14 @@ class game {
     } else {
       this.game.classList.remove("disabled");
     }
+  }
+  start() {
+    this.timer.classList.remove('not-playing');
+    setTimeout(() => {
+      this.playing = true;
+      this.timePath.setAttribute('style', `animation: dash ${this.timeLimit}s linear 1s reverse;`)
+      this.game.setAttribute('style', 'transform: none');
+    }, 1000);
   }
 }
 
@@ -227,6 +244,7 @@ class masterMind extends game {
   }
 
   start() {
+    super.start();
     this.setup(this.difficulty);
     this.score.innerHTML = this.target;
     this.slotIndex = 0;
@@ -236,6 +254,7 @@ class masterMind extends game {
 
 class controls extends game {
   constructor(container, difficulty = 20, target = 5) {
+    target = Math.min(Math.ceil(target * 0.25), 4);
     super(container, difficulty, target, "controls", `Use the controls to recreate the sequence`);
     this.resets = [];
     this.disable();
@@ -243,6 +262,7 @@ class controls extends game {
   }
 
   end(winner) {
+    this.timePath.style.animationPlayState = 'paused';
     this.playing = false;
     if (winner) {
       this.disable();
@@ -384,7 +404,7 @@ class controls extends game {
 
   makeKeyPad() {
     const emos = [["💛", "💚", "💜", "💙"],
-                 ["🇨🇵","🇨🇦","🇨🇩", "🇩🇿"],
+                 ["🇫🇷","🇨🇦","🇨🇩", "🇩🇿"],
                    ["不","思","可","议"],
                  ["☀️","⛄","🍂", "🌻"]][~~(Math.random() * 3)];
     const holder = document.createElement("div");
@@ -484,10 +504,11 @@ class controls extends game {
   }
 
   newSequence() {
+    this.timePath.style.animationPlayState = 'paused';
     this.loading = true;
     this.targetSeq = [];
     const controls = document.querySelectorAll("#controls .control");
-    const symb = ~~(Math.random() * this.difficulty) + 2;
+    const symb = ~~(Math.random() * this.difficulty) + ~~(Math.random() * this.difficulty * 0.75) + 2;
 
     for (let i = 0; i < symb; i++) {
       setTimeout(() => {
@@ -498,13 +519,17 @@ class controls extends game {
 
     setTimeout(() => {
       this.resetAll();
-      this.disable(false);
-    }, symb * 500);
+      setTimeout(() => {
+        say('go');
+        this.disable(false);
+        this.timePath.style.animationPlayState = 'running';
+      }, 500);
+    }, (symb + 1) * 500);
   }
 
   setup() {
     let thisRow, numRows = 0;
-    let numCtrls = ~~(Math.random() * this.difficulty * 0.5) + ~~(Math.random() * this.difficulty * 0.25) + 2;
+    let numCtrls = (this.difficulty) + ~~(Math.random() * (this.difficulty / this.target));
     this.keypad = false;
 
     while (numCtrls > 0 && numRows < 5) {
@@ -521,8 +546,8 @@ class controls extends game {
       document.querySelectorAll("#controls .control"),
       (control) => {
         const rect = control.getBoundingClientRect();
-        const small = Math.min(rect.width, rect.height);
-        control.style.fontSize = `${(small / 2) * config.size * 0.4}px`;
+        const small = Math.min(control.offsetWidth, control.offsetHeight);
+        control.style.fontSize = `${(small / 2)}px`;
       }
     );
   }
@@ -533,6 +558,7 @@ class controls extends game {
   }
 
   start() {
+    super.start();
     this.disable();
     setTimeout(() => {
       this.newSequence();
@@ -544,12 +570,21 @@ class controls extends game {
 
 class flipper extends game {
   constructor(container, difficulty = 4, target = 2) {
+    target = ~~Math.random(target * 2) + 1;
+    target = Math.min(Math.max(target, difficulty), 8);
+    difficulty = Math.max(target * 2, difficulty) + 1;
     super(container, difficulty, target, "flipper", `Find ${target} Pairs of Matching Symbols`);
     this.board = [];
-    this.cards = remoji(20);
+    this.cards = remoji(Math.min(Math.ceil(target), Math.ceil(difficulty)));
+    this.cards = this.cards.reduce((r, c) => {
+      return r.concat([c, c]);
+    }, []);
   }
 
   addPiece(piece) {
+    if(!piece) {
+      piece = this.cards[~~(Math.random() * this.cards.length)];
+    }
     const div = document.createElement("div");
     div.innerHTML = `<div>${piece}</div>`;
     div.classList.add("piece");
@@ -565,23 +600,20 @@ class flipper extends game {
     card.classList.add("clicked");
 
     if (this.currentPiece) {
-      this.game.style.pointerEvents = 'none';
       const winner = this.currentPiece == piece;
       this.currentPiece = null;
 
+      this.disable();
       setTimeout(() => {
         if (winner) {
           this.addScore();
           clicked.classList.add('finished');
           card.classList.add('finished');
-          clicked.classList.remove("clicked");
-          card.classList.remove("clicked");
-        } else {
-          clicked.classList.remove("clicked");
-          card.classList.remove("clicked");
         }
+        clicked.classList.remove("clicked");
+        card.classList.remove("clicked");
         setTimeout(() => {
-          this.game.style.pointerEvents = 'auto';
+          this.disable(false);
         }, 500);
       }, 500);
     } else {
@@ -595,26 +627,32 @@ class flipper extends game {
 
     if (this.current >= this.target) {
       this.disable();
+      this.timePath.style.animationPlayState = 'paused';
+      [].forEach.call(document.getElementsByClassName("piece"), (c) => {
+        c.classList.add('clicked');
+      });
       setTimeout(() => {
         this.end(true);
       }, 1000);
     }
   }
 
-  start(rows = 2, cols = 2) {
+  start() {
+    super.start();
+    const rows = Math.min(this.target / 2, 5) + 1;
+    const cols = Math.min(this.target / 2, 5) + 1;
     this.board = [];
-    let pieces = Array.from(Array((rows * cols) & ~1), (_, i) => i + 1)
-      .map((i) => {
-        return this.cards[~~((i + 1) / 2) - 1];
-      })
-      .sort(() => (Math.random() > 0.5 ? -1 : 0));
+    let pieces = this.cards.slice(0)
+      .sort(() => Math.random() > 0.5 ? -1 : 1)
+      .sort(() => Math.random() > 0.5 ? -1 : 1)
+      .sort(() => Math.random() > 0.5 ? -1 : 1);
 
     let row;
 
-    for (let i = 0; i < cols; i++) {
+    for (let i = 0; i < (cols); i++) {
       row = document.createElement("div");
       row.classList.add("row");
-      for (let j = 0; j < rows && pieces[0]; j++) {
+      for (let j = 0; j < (rows); j++) {
         row.append(this.addPiece(pieces.pop()));
       }
       this.game.append(row);
@@ -625,6 +663,8 @@ class flipper extends game {
 
 class taptap extends game {
   constructor(container, difficulty, target) {
+    difficulty *= 5;
+    target = Math.min(~~(Math.random() * target * 2) + 1, 12);
     super(container, difficulty, target, 'taptap', `Click on ${target} ⭐ - Avoid the 💣`);
   }
 
@@ -639,19 +679,22 @@ class taptap extends game {
     piece.classList.add("piece");
     piece.classList.add(left ? "left" : "right");
     piece.classList.add(bad ? "bad" : "good");
-    piece.style = `top: ${Math.random() * 150 - 50}%`;
+    piece.innerHTML = bad ? '<div>💣</div>' : '⭐';
     this.game.appendChild(piece);
+    piece.style = `transform: translateY(${(Math.random() * 600) - 300}px) translateX(${
+      left ? -20 : 20
+    }px);`;
 
     piece.ontransitionend = () => {
       piece.classList.add("remove-me");
     };
 
-    piece.onmousedown = this.clickHandler.bind(this, piece, bad);
+    piece.onclick = this.clickHandler.bind(this, piece, bad);
 
     setTimeout(() => {
-      piece.style = `top: ${Math.random() * 150 - 50}%; left: ${
-        left ? 120 : -20
-      }%; transition-duration: ${Math.random() * 4 + 2}s;`;
+      piece.style = `transform: translateY(${(Math.random() * 600) - 300}px) translateX(${
+        left ? 800 : -800
+      }px); transition-duration: ${Math.random() * 4 + 2}s;`;
     }, 300);
 
     setTimeout(this.addPiece.bind(this), Math.random() * 10000);
@@ -671,6 +714,7 @@ class taptap extends game {
   }
 
   start() {
+    super.start();
     this.playing = true;
     for (let i = 0; i < this.difficulty; i++) {
       setTimeout(this.addPiece.bind(this), Math.random() * 1000);
