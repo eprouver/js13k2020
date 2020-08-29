@@ -228,6 +228,7 @@ const nextSlide = (passed) => {
     ns.classList.remove("playing");
     if (!passed) {
       config.timeLimit += 20;
+      config.difficulties = config.difficulties.map(d => d * 0.8);
       say("blocked");
       play(config.block);
       ns.classList.add("failed");
@@ -244,7 +245,7 @@ const nextSlide = (passed) => {
       progress += config.winProgress;
     } else {
       config.timeLimit -= 10;
-      config.levelProgress *= 1.5;
+      config.levelProgress *= 1.25;
       config.targets = config.targets.map(t => t += 1);
       say( ["yess... continue", "good things", "Advance"][~~(Math.random() * 3)]);
       play(config.levelUp);

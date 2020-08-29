@@ -489,7 +489,7 @@ h2 {
   transform: rotate3d(-1, 1, 1, 0deg) translateY(-10px);
   z-index: 1;
 }
-#flipper .piece div {
+#flipper .piece svg {
   transform: translateZ(5px);
 }
 #flipper .piece.finished {

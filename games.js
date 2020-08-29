@@ -255,7 +255,8 @@ class masterMind extends game {
 class controls extends game {
   constructor(container, difficulty = 20, target = 5) {
     target = Math.min(Math.ceil(target * 0.25), 4);
-    super(container, difficulty, target, "controls", `Use the controls to recreate the sequence`);
+    difficulty = Math.max(difficulty, 1);
+    super(container, difficulty, target, "controls", `Use any controls to recreate the sequence`);
     this.resets = [];
     this.disable();
     this.setup();
@@ -586,7 +587,13 @@ class flipper extends game {
       piece = this.cards[~~(Math.random() * this.cards.length)];
     }
     const div = document.createElement("div");
-    div.innerHTML = `<div>${piece}</div>`;
+    div.innerHTML = `<svg
+    width="100%" height="100%"
+    viewBox="-50 -50 100 75"
+    xmlns="http://www.w3.org/2000/svg"
+  ><text x="0" y="0" text-anchor="middle" font-size="50">${piece}</text>
+      </svg>`;
+    //div.innerHTML = `<div>${piece}</div>`;
     div.classList.add("piece");
     div.onclick = () => {
       say(piece);
@@ -663,7 +670,7 @@ class flipper extends game {
 
 class taptap extends game {
   constructor(container, difficulty, target) {
-    difficulty *= 5;
+    difficulty = Math.max(difficulty, 1) * 5;
     target = Math.min(~~(Math.random() * target * 2) + 1, 12);
     super(container, difficulty, target, 'taptap', `Click on ${target} ⭐ - Avoid the 💣`);
   }
@@ -689,7 +696,8 @@ class taptap extends game {
       piece.classList.add("remove-me");
     };
 
-    piece.onclick = this.clickHandler.bind(this, piece, bad);
+    piece.ontouchstart = this.clickHandler.bind(this, piece, bad);
+    piece.onmousedown = this.clickHandler.bind(this, piece, bad);
 
     setTimeout(() => {
       piece.style = `transform: translateY(${(Math.random() * 600) - 300}px) translateX(${
