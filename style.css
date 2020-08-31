@@ -4,9 +4,10 @@
 } */
 * {
   box-sizing: border-box;
+  touch-action: manipulation'
 }
 
-html, body {
+html, body, #timer {
   position: fixed;
   overflow: hidden;
   width: -moz-available;
@@ -465,7 +466,7 @@ h2 {
   text-align: center;
   border: 2px solid black;
   height: 90%;
-  background: purple;
+  background: #5e278f;
   box-shadow: inset 0 0 20px black;
   display: flex;
   align-items: center;
@@ -474,8 +475,9 @@ h2 {
   transform: rotate3d(-1, 1, 0, 180deg);
   transform-style: preserve-3d;
   cursor: pointer;
+  z-index: 1;
 }
-#flipper .piece:before {
+#flipper .piece:after {
   content: '';
   background: white;
   height: 100%;
@@ -483,6 +485,14 @@ h2 {
   position: absolute;
   top: 0;
   transform: translateZ(1px);
+}
+#flipper .piece:before {
+  content: 'click';
+  position: absolute;
+  font-size: 0.5em;
+  transform: scaleY(-1);
+  top: 0;
+  color: #8149b3;
 }
 #flipper .piece.clicked {
   pointer-events: none;
@@ -503,6 +513,9 @@ h2 {
 #controls.game, #flipper.game {
   display: flex;
   flex-direction: column;
+}
+#controls.lock-msg {
+  box-shadow: inset 0 0 0 26px red;
 }
 #controls .c-holder {
   display: flex;
@@ -574,19 +587,6 @@ h2 {
     bottom: 1.45em;
     font-size: 3em;
     opacity: 0.3;
-}
-#controls .lock-msg:before {
-    content: '🔒';
-    left: 10px;
-    position: absolute;
-}
-#controls .lock-msg:after {
-    content: '🔒';
-    right: 10px;
-    position: absolute;
-}
-#controls .lock-msg.hidden {
-  display: none;
 }
 
 #controls .control.winner .dial, #controls .control.winner .key-button, #controls .control.winner .tog-holder {
@@ -755,15 +755,6 @@ svg#timer {
 }
 
 #timer #timer-path {
-  stroke-dasharray: 5307.3;
-  stroke-dashoffset: -5307.3;
   stroke-linejoin: round;
-  stroke: red;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: 0;
-    stroke: #01ff70;
-  }
+  stroke: #01ff70;
 }

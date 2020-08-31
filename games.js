@@ -31,10 +31,12 @@ class game {
     this.timer = document.getElementById('timer-holder');
     this.timePath = document.getElementById('timer-path');
     this.timeLimit = config.timeLimit;
+    this.clickEvent = ['add-me'];
+    this.clickEvent.push(isMobile ? 'touchstart' : 'mousedown');
   }
 
   end(winner) {
-    this.timePath.style.animationPlayState = 'paused';
+    this.paused = true;
     this.playing = false;
     this.timer.classList.add('not-playing');
     if (winner) {
@@ -51,19 +53,54 @@ class game {
       this.game.classList.remove("disabled");
     }
   }
+
+  beginTimer() {
+    if (this.timing) return;
+    let duration = 1000 * this.timeLimit;
+    let last = +new Date();
+    let elapsed = 0;
+    let rate = 0;
+
+    var step = (delta) => {
+      if (!this.playing) return;
+
+      let current = +new Date();
+      if (this.paused) {
+        last = current;
+        this.timePath.setAttribute("stroke-dashoffset", (rate * 5329).toFixed(1));
+        requestAnimationFrame(step);
+        return;
+      }
+
+      elapsed += current - last;
+      last = current;
+
+      let remaining = duration - elapsed;
+
+      if (remaining < 60) {
+        this.timer.classList.add('not-playing');
+        this.timePath.setAttribute("stroke-dashoffset", 0);
+        if(!this.playing) return;
+        this.end(false);
+        return;
+
+      } else {
+        rate = 1 - remaining / duration;
+        this.timePath.setAttribute("stroke-dashoffset", (rate * 5329).toFixed(1));
+      }
+
+      requestAnimationFrame(step);
+    }
+    step();
+    this.timing = true;
+  }
+
   start() {
+      this.game.classList.add('lock-msg');
     this.timer.classList.remove('not-playing');
+    this.timePath.setAttribute("stroke-dashoffset", 0);
     setTimeout(() => {
       this.playing = true;
-      this.timePath.setAttribute('style', `animation: dash ${this.timeLimit}s linear 1s reverse;`);
-
-      setTimeout(() => {
-        this.timePath.onanimationend = () => {
-          if(!this.playing) return;
-          this.end(false);
-        }
-      }, 500);
-
       this.game.setAttribute('style', 'transform: none');
     }, 1000);
   }
@@ -72,16 +109,15 @@ class game {
 class controls extends game {
   constructor(container, difficulty = 20, target = 5) {
     target = Math.min(Math.ceil(target * 0.25), 4);
-    difficulty = Math.max(difficulty, 1);
-    super(container, difficulty, target, "controls", `Use any controls to recreate the sequence`);
+    difficulty = Math.max(difficulty, 1) * 1.3;
+    super(container, difficulty, target, "controls", `Use any controls to make this sequence`);
     this.resets = [];
     this.disable();
     this.setup();
   }
 
   end(winner) {
-    this.timePath.style.animationPlayState = 'paused';
-    this.lockmsg.classList.add('hidden');
+    this.paused = true;
     this.playing = false;
     if (winner) {
       this.disable();
@@ -92,7 +128,7 @@ class controls extends game {
             }, 1000);
     } else {
       this.disable();
-      this.instructions.innerText = "Game Over";
+      this.instructions.innerText = "Incomplete";
 
       [].forEach.call(document.querySelectorAll("#controls .control"), (c) => {
         c.style.transition = 'all 1s ease';
@@ -106,22 +142,15 @@ class controls extends game {
     }
   }
 
-  replay() {
-    this.instructions.innerText = "...";
-    removeAllChildren(this.game);
-    this.setup();
-    setTimeout(this.start.bind(this), 1000);
-  }
-
   addScore(plus = 1) {
-    this.timePath.style.animationPlayState = 'paused';
-    this.lockmsg.classList.remove('hidden');
+    this.paused = true;
     this.current += plus;
     this.score.innerText = this.current;
 
     if (this.current >= this.target) {
       this.end(true);
     } else {
+      this.instructions.innerHTML = '... Next Sequence ...';
       this.targetSeq = [];
       this.resetAll();
       this.start();
@@ -136,7 +165,7 @@ class controls extends game {
         say(icon);
         this.targetSeq.shift();
         if (this.targetSeq.length == 0) {
-          this.timePath.style.animationPlayState = 'paused';
+              this.paused = true;
           this.addScore();
         } else {
           this.instructions.innerText = this.targetSeq.join(", ");
@@ -171,12 +200,15 @@ class controls extends game {
     setting3.classList.add("setting3");
     setting3.innerText = settings[2];
 
-    holder.onclick = () => {
-      current += 1;
-      if (current > 2) current = 0;
-      dial.parentElement.setAttribute("data-setting", `set_${current}`);
-      this.clickHandler(settings[current]);
-    };
+    this.clickEvent.forEach((eve) => {
+      holder.addEventListener(eve, () => {
+        current += 1;
+        if (current > 2) current = 0;
+        dial.parentElement.setAttribute("data-setting", `set_${current}`);
+        this.clickHandler(settings[current]);
+      }, false);
+    });
+
     dialHolder.append(setting1);
     dialHolder.append(setting2);
     dialHolder.append(setting3);
@@ -210,11 +242,13 @@ class controls extends game {
     togHolder.append(togBack);
     holder.append(togHolder);
 
-    holder.onclick = () => {
-      flipped = !flipped;
-      togHolder.classList.toggle("flipped");
-      this.clickHandler(settings[flipped ? 0 : 1]);
-    };
+    this.clickEvent.forEach((eve) => {
+      holder.addEventListener(eve, () => {
+        flipped = !flipped;
+        togHolder.classList.toggle("flipped");
+        this.clickHandler(settings[flipped ? 1 : 0]);
+      }, false);
+    });
 
     this.resets.push(() => {
       flipped = false;
@@ -235,21 +269,23 @@ class controls extends game {
     const keyHolder = document.createElement("div");
     keyHolder.classList.add("key-holder");
 
-    holder.onclick = (e) => {
-      e.stopPropagation();
-      const seq = [...new Array(~~(Math.random() * 4) + 2)].map(
-        (a) => emos[~~(Math.random() * emos.length)]
-      );
+    ['add-me'].forEach((eve) => {
+      holder.addEventListener(eve, (e) => {
+        e.stopPropagation();
+        const seq = [...new Array(~~(Math.random() * 4) + 2)].map(
+          (a) => emos[~~(Math.random() * emos.length)]
+        );
 
-      if (this.loading) {
-        seq.forEach((a) => {
-          this.targetSeq.push(a);
-        });
-      }
+        if (this.loading) {
+          seq.forEach((a) => {
+            this.targetSeq.push(a);
+          });
+        }
 
-      keyHolder.classList.add('emph');
-      setTimeout(() => { keyHolder.classList.remove('emph'); }, 500);
-    };
+        keyHolder.classList.add('emph');
+        setTimeout(() => { keyHolder.classList.remove('emph'); }, 500);
+      }, false);
+    });
 
     const row1 = document.createElement("div");
     row1.classList.add("key-row");
@@ -262,20 +298,24 @@ class controls extends game {
       button.innerHTML = emo;
       button.classList.add("key-button");
 
-      button.addEventListener("click", (e) => {
-        e.stopPropagation();
-        say(emo);
-        if (emo === this.targetSeq[0]) {
-          this.targetSeq.shift();
-          if (this.targetSeq.length == 0) {
-            this.addScore();
+
+      [isMobile ? 'touchstart' : 'mousedown'].forEach((eve) => {
+        button.addEventListener(eve, (e) => {
+          e.stopPropagation();
+          say(emo);
+          if (emo === this.targetSeq[0]) {
+            this.targetSeq.shift();
+            if (this.targetSeq.length == 0) {
+              this.addScore();
+            } else {
+              this.instructions.innerText = this.targetSeq.join(", ");
+            }
           } else {
-            this.instructions.innerText = this.targetSeq.join(", ");
+            this.end(false);
           }
-        } else {
-          this.end(false);
-        }
+        }, false);
       });
+
       if (i % 2 == 1) {
         row2.append(button);
       } else {
@@ -326,16 +366,17 @@ class controls extends game {
   }
 
   newSequence() {
-    this.lockmsg.classList.remove('hidden');
-    this.timePath.style.animationPlayState = 'paused';
+    this.game.classList.add('lock-msg');
+    this.paused = true;
     this.loading = true;
     this.targetSeq = [];
     const controls = document.querySelectorAll("#controls .control");
-    const symb = ~~(Math.random() * this.difficulty) + ~~(Math.random() * this.difficulty * 0.75) + 2;
+    const symb = ~~(Math.random() * this.difficulty) + ~~(Math.random() * this.difficulty * 0.75) + Math.max(config.currentLevel, 4);
 
     for (let i = 0; i < symb; i++) {
       setTimeout(() => {
-        controls[~~(Math.random() * controls.length)].click();
+        const event = new CustomEvent("add-me");
+        controls[~~(Math.random() * controls.length)].dispatchEvent(event);
         this.instructions.innerText = this.targetSeq.join(", ");
       }, i * 500);
     }
@@ -343,20 +384,21 @@ class controls extends game {
     setTimeout(() => {
       this.resetAll();
       setTimeout(() => {
-        this.lockmsg.classList.add('hidden');
+        this.game.classList.remove('lock-msg');
         say('go');
+        this.beginTimer();
         this.disable(false);
-        this.timePath.style.animationPlayState = 'running';
+            this.paused = false;
       }, 500);
     }, (symb + 1) * 500);
   }
 
   setup() {
     this.lockmsg = document.createElement('div');
-    this.lockmsg.classList.add('lock-msg');
+    this.lockmsg.classList.add('locks');
     this.game.append(this.lockmsg);
     let thisRow, numRows = 0;
-    let numCtrls = (this.difficulty) + ~~(Math.random() * (this.difficulty / this.target)) + (this.target * 0.35);
+    let numCtrls = (this.difficulty * 1.3) + ~~(Math.random() * (this.difficulty / this.target)) + (this.target * 0.35);
     this.keypad = false;
 
     while (numCtrls > 0 && numRows < 5) {
@@ -398,7 +440,7 @@ class controls extends game {
 class flipper extends game {
   constructor(container, difficulty = 4, target = 2) {
     target = ~~(Math.random() * target * 0.6) + 2;
-    target = Math.min(target, 8);
+    target = Math.min(target, (~~(Math.random() * 30) + 2));
     difficulty = Math.max(target * 2, difficulty) + 2;
     super(container, difficulty, target, "flipper", `Find ${target} Pairs of Matching Symbols`);
     this.board = [];
@@ -431,6 +473,7 @@ class flipper extends game {
   }
 
   clickHandler(card, piece) {
+    this.disable();
     const clicked = document.getElementsByClassName("clicked")[0];
     card.classList.add("clicked");
 
@@ -438,8 +481,8 @@ class flipper extends game {
       const winner = this.currentPiece == piece;
       this.currentPiece = null;
 
-      this.disable();
       setTimeout(() => {
+        this.paused = true;
         if (winner) {
           this.addScore();
           clicked.classList.add('finished');
@@ -448,11 +491,15 @@ class flipper extends game {
         clicked.classList.remove("clicked");
         card.classList.remove("clicked");
         setTimeout(() => {
+          this.paused = false;
           this.disable(false);
         }, 500);
       }, 500);
     } else {
       this.currentPiece = piece;
+      setTimeout(() => {
+        this.disable(false);
+      }, 10);
     }
   }
 
@@ -461,8 +508,9 @@ class flipper extends game {
     this.score.innerText = this.current;
 
     if (this.current >= this.target) {
+      this.playing = false;
       this.disable();
-      this.timePath.style.animationPlayState = 'paused';
+      this.paused = true;
       [].forEach.call(document.getElementsByClassName("piece"), (c) => {
         c.classList.add('clicked');
       });
@@ -490,16 +538,22 @@ class flipper extends game {
       for (let j = 0; j < (rows); j++) {
         row.append(this.addPiece(pieces.pop()));
       }
-      this.game.append(row);
+      Math.random() > 0.5 ? this.game.append(row) : this.game.prepend(row);
     }
+    this.game.removeChild(this.score);
+    this.game.prepend(this.score);
     this.disable(false);
+    this.playing = true;
+    setTimeout(() => {
+      this.beginTimer();
+    }, 1000);
   }
 }
 
 class taptap extends game {
   constructor(container, difficulty, target) {
     difficulty = Math.max(difficulty, 1) * 5;
-    target = Math.min(~~(Math.random() * target * 2) + 2, 12);
+    target = Math.min(~~(Math.random() * target * 2) + 2,( ~~(Math.random() * 20) + 2));
     super(container, difficulty, target, 'taptap', `Click on ${target} ⭐ - Avoid the 💣`);
   }
 
@@ -552,6 +606,7 @@ class taptap extends game {
   start() {
     super.start();
     this.playing = true;
+          this.beginTimer();
     for (let i = 0; i < this.difficulty; i++) {
       setTimeout(this.addPiece.bind(this), Math.random() * 1000);
     }

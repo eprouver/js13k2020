@@ -227,7 +227,7 @@ const nextSlide = (passed) => {
   if (ns) {
     ns.classList.remove("playing");
     if (!passed) {
-      config.timeLimit += 20;
+      config.timeLimit += 15;
       config.difficulties = config.difficulties.map(d => d * 0.8);
       say("blocked");
       play(config.block);
@@ -241,7 +241,7 @@ const nextSlide = (passed) => {
       say("for oh for. null pointer");
       play(config.four);
       ns.classList.add("finished");
-      ns.innerHTML = "<h1>404</h1>";
+      ns.innerHTML = "<h1>404</h1><p>You found a null pointer!</p>";
       progress += config.winProgress;
     } else {
       config.timeLimit -= 10;
@@ -251,11 +251,13 @@ const nextSlide = (passed) => {
       play(config.levelUp);
       ns.classList.add("winning");
       container.classList.add("winning");
-      ns.innerHTML = "<h1>😃</h1>";
+      config.currentLevel += 1;
+      const faces = ['😃', '😄', '😎', '😊', '🥳', '🤠','😆', '😂', '🤩', '😜', '😋'];
+      ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 1.6, faces.length))]}</h1>`;
       selectNewVoice();
 
       setTimeout(() => {
-        say('Welcome to New Level');
+        say(`Welcome to Level ${config.currentLevel}`);
         finishLeaf();
         reset(true);
         nextSlide();

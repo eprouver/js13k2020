@@ -31,6 +31,7 @@ const config = {
   tartimes: 1.75,
   levelProgress: 2000,
   timeLimit: 40,
+  currentLevel: 1,
 };
 
 const randBetween = (min, max) => {
@@ -76,7 +77,7 @@ const say = (m) => {
   const msg = new SpeechSynthesisUtterance();
   msg.voice = voice;
   msg.volume = 3;
-  msg.rate = 1.5;
+  msg.rate = 1.3;
   msg.pitch = randBetween(3, 12) / 10;
   msg.text = m;
   msg.lang = config.lang;
