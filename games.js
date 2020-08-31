@@ -188,6 +188,7 @@ class controls extends game {
     dialHolder.classList.add("dial-holder");
     dialHolder.setAttribute("data-setting", `set_${current}`);
     const dial = document.createElement("div");
+    dial.innerHTML = '<div>⟳</div>';
     dial.classList.add("dial");
 
     const setting1 = document.createElement("div");
@@ -329,7 +330,7 @@ class controls extends game {
     return holder;
   }
 
-  newControl(two, three) {
+  newControl() {
     const rand = Math.random();
 
     switch (true) {
@@ -338,10 +339,10 @@ class controls extends game {
         return this.makeKeyPad();
         break;
       case rand < 0.51:
-        return this.makeToggle(two);
+        return this.makeToggle(remoji(2));
         break;
       default:
-        return this.makeDial(three);
+        return this.makeDial(remoji(3));
         break;
     }
   }
@@ -352,10 +353,8 @@ class controls extends game {
       i;
     cHolder = document.createElement("div");
     cHolder.classList.add("c-holder");
-    const two = remoji(2);
-    const three = remoji(3);
     for (i = 0; i < cNum; i++) {
-      holder = this.newControl(two, three);
+      holder = this.newControl();
       cHolder.append(holder);
     }
     if (Math.random() > 0.5) {
@@ -461,7 +460,6 @@ class flipper extends game {
     xmlns="http://www.w3.org/2000/svg"
   ><text x="0" y="0" text-anchor="middle" font-size="50">${piece}</text>
       </svg>`;
-    //div.innerHTML = `<div>${piece}</div>`;
     div.classList.add("piece");
     const clickstart = () => {
       say(piece);

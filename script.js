@@ -158,7 +158,9 @@ const windowScale = () => {
 
 window.onresize = windowScale;
 window.onorientationchange = windowScale;
-windowScale();
+setTimeout(() => {
+  windowScale();
+}, 500);
 
 const viewportTransform = (val) => {
   val = val.map((val) => -val);
@@ -310,7 +312,7 @@ const nextSlide = (passed) => {
     ns.classList.add("loading");
   }, 23 * config.endingSpeed);
   setTimeout(() => {
-    say("New");
+    say("suspicion");
   }, 30 * config.endingSpeed);
   setTimeout(() => {
     ns.classList.remove("loading");

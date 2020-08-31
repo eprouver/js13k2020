@@ -9,8 +9,6 @@
 <body>
 <!-- partial:index.partial.html -->
 <div id="timer-holder" class="not-playing">
-
-
   <svg id="timer" xmlns="http://www.w3.org/2000/svg" width="700" height="603" viewbox="0 0 700 603">
     <path id="timer-path" d="M315 71l-1-62h-56v29h33l4-16H182v20l-32-1V2h-23v12h40v13H63V10L10 9 9 83h29V23H23v138h16v19H7l5 22h26v30H8v-20h16v82h14l1 75H9v-21s2-27 0-27h16v116H8v42l32 2-1-19H23v103l43 3c0 1 0 23-1 22H7v-10h87v-19h73v29h26v-27h26v15h89v-17h-41v31h103l-1-22h41v-16l36 8s0 24-1 23c1 1 27-3 27-2l-1-23h31v32h-17l-1-18h83v16h42v-33h-27v21h107v-61l-29 1-1 72h19V469h-20v22h32v-54h-31v-68h32v-26h-32v-63h29v41h-18v-84h16v-19h-29v-25h33v-35c0 2-31 0-32 0v-38h30l1 20-17-1-1-78h-15v24l32-3 2-78h-81v38l65-1-1-20-82 1-1-15-27-1v37h-20V19l-45-1v23h-45l6-38 23 6-1 16h-49v17h-26V7h-26v26c0 1 2 44-4 39"
     stroke-opacity="null" stroke-dasharray="5307.3" stroke-dashoffset="0" stroke-width="3" fill="none"/></svg>
@@ -23,8 +21,8 @@
     <div id="title" class="slide playing instructions">
       <h2>90's Movie Hacker</h2>
       <p>Our system is all hacked!</p>
-      <p>Solve their puzzles before you're blocked.</p>
-      <p>Destroy the <strong>&ldquo;404 - null pointers&rdquo;</strong> in each level.</p>
+      <p>Solve the puzzles before you're blocked.</p>
+      <p>Find and destroy the <strong>&ldquo;404 - null pointers&rdquo;</strong>.</p>
       <!-- <p>Play puzzles to follow the footprints of the bad guys.</p>
       <p>Look for deep links and delete dead ends.</p> -->
       <p>You're the best hacker we've got in this movie!</p>
@@ -34,6 +32,7 @@
 
     <div class="slide playing instructions" style="transform: translate(-50%, -50%) translate3d(1000px, 0px, 0px) rotateX(0deg) rotateY(90deg) rotateZ(90deg);">
       <p>More Explaination</p>
+      <a href="./gameTest.html">Practice</a><br/>
       <button id="start-button" onclick="reset(true); nextSlide();  play(config.start);">Start</button>
       <a class="toggle-sound" onclick="toggleSound()">🔊</a>
     </div>
@@ -47,6 +46,28 @@
 </div>
 
 <a class="toggle-sound" onclick="toggleSound()">🔊</a>
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+      <filter id="glitch" x="0" y="0">
+          <feColorMatrix in="SourceGraphic" mode="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r" />
+
+        <feOffset in="r" result="r" dx="-2">
+          <animate attributeName="dx" attributeType="XML" values="0; -2; 0; -3; -2; -1; 0 ;-3; 0" dur="6s" repeatCount="indefinite"/>
+        </feOffset>
+        <feColorMatrix in="SourceGraphic" mode="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+        <feOffset in="g" result="g" dx="0" dy="1">
+          <animate attributeName="dx" attributeType="XML" values="0; 0; 0; -3; 0; 3; 0 ;-1; 0" dur="3s" repeatCount="indefinite"/>
+        </feOffset>
+        <feColorMatrix in="SourceGraphic" mode="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+        <feOffset in="b" result="b" dx="0" dy="3">
+          <animate attributeName="dx" attributeType="XML" values="0; 1; -1; 2; 0; 2; 0 ;3; 0" dur="1s" repeatCount="indefinite"/>
+        </feOffset>
+        <feBlend in="r" in2="g" mode="screen" result="blend" />
+        <feBlend in="blend" in2="b" mode="screen" result="blend" />
+      </filter>
+    </defs>
+</svg>
 
 <!-- partial -->
   <script src="./shared.js"></script>

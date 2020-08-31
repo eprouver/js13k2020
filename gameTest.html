@@ -6,46 +6,91 @@
   <title>JS13K</title>
   <link rel="stylesheet" href="../style.css">
   <style>
-  html, body {
-    position: relative;
-    overflow: visible;
-    width: fill-available;
-    height: fill-available;
-    max-height: fit-content;
-    max-width: fit-content;
-  }
-
   #test-holder {
-    display:flex;
-    flex-direction: column;
+    text-align: left;
+  }
+  #timer-holder {
+    display: none;
   }
 
-  #test-holder > div {
-    margin: 30px;
+  .practice {
+    display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        position: absolute;
+        left: 5%;
+        width: 90%;
+        margin-top: 70px;
   }
+
+  .playing {
+    min-width: 605px;
+        position: relative;
+        transition: all 1s ease;
+  }
+
+  button {
+    background: #ccc;
+    font-size: 2vw;
+  }
+  #tip {
+    font-size: 2em;
+    color: white;
+    margin: 30px;
+        margin-right: 100px;
+}
+a.back{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 3em;
+  color: white;
+}
   </style>
 </head>
 <body>
 <!-- partial:index.partial.html -->
+
+<div id="timer-holder" class="not-playing">
+  <svg id="timer" xmlns="http://www.w3.org/2000/svg" width="700" height="603" viewbox="0 0 700 603">
+    <path id="timer-path" d="M315 71l-1-62h-56v29h33l4-16H182v20l-32-1V2h-23v12h40v13H63V10L10 9 9 83h29V23H23v138h16v19H7l5 22h26v30H8v-20h16v82h14l1 75H9v-21s2-27 0-27h16v116H8v42l32 2-1-19H23v103l43 3c0 1 0 23-1 22H7v-10h87v-19h73v29h26v-27h26v15h89v-17h-41v31h103l-1-22h41v-16l36 8s0 24-1 23c1 1 27-3 27-2l-1-23h31v32h-17l-1-18h83v16h42v-33h-27v21h107v-61l-29 1-1 72h19V469h-20v22h32v-54h-31v-68h32v-26h-32v-63h29v41h-18v-84h16v-19h-29v-25h33v-35c0 2-31 0-32 0v-38h30l1 20-17-1-1-78h-15v24l32-3 2-78h-81v38l65-1-1-20-82 1-1-15-27-1v37h-20V19l-45-1v23h-45l6-38 23 6-1 16h-49v17h-26V7h-26v26c0 1 2 44-4 39"
+    stroke-opacity="null" stroke-dasharray="5307.3" stroke-dashoffset="0" stroke-width="3" fill="none"/></svg>
+</div>
+
+<a class="back" href="./">Let's Play!</a>
+
 <div id="test-holder">
-<div id="game-1"></div>
-<div id="game-2"></div>
-<div id="game-3"></div>
-<div id="game-4"></div>
+  <h2>&nbsp;&nbsp;&nbsp;Practice:</h2><br/><br/>
+<button onclick="loader(taptap, 'Bombs are always in the foreground. If it\'s too close, better not risk it.')">One</button>
+<button onclick="loader(controls, 'When the border is not red, click to match each symbol in the top bar. You can click anywhere on a dial, it always increments one setting clockwise.')">Two</button>
+<button onclick="loader(flipper, 'Try starting from top-left and go left to right, like reading a book. Easy levels can have repeat symbols.')">Three</button>
+<div class="practice">
+  <div id="tip">
+  </div>
+<div class="slide playing">
+  <div id="game"></div>
+</div>
+
+</div>
 </div>
 <!-- partial -->
   <script src="../shared.js"></script>
   <script src="./games.js"></script>
   <script>
-    const game1 = document.getElementById('game-1');
-    const game2 = document.getElementById('game-2');
-    const game3 = document.getElementById('game-3');
-    const game4 = document.getElementById('game-4');
-    const myGame1 = new masterMind(game1, 3, 2);
-    const myGame2 = new taptap(game2, 3, 2);
-    const myGame3 = new controls(game3, 3, 2);
-    const myGame4 = new flipper(game4, 3, 2);
-    myGame1.start();myGame2.start();myGame3.start();myGame4.start();
+  say = () => {};
+  const gameContainer = document.getElementById('game');
+  const tip = document.getElementById('tip');
+    const nextSlide = () => {
+      gameContainer.innerHTML = '';
+      tip.innerHTML = '';
+    }
+
+    const loader = (game, tipText) => {
+      gameContainer.innerHTML = '';
+      const myGame2 = new game(gameContainer, 1, 1);
+      tip.innerHTML = `<h2>&nbsp;&nbsp;&nbsp;Hot Tip:</h2> <p>${tipText}</p>`;
+      myGame2.start();
+    }
 
   </script>
 </body>
