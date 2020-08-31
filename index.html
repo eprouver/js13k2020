@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0; user-scalable=yes;">
+  <meta name="monetization" content="$ilp.uphold.com/njQnNZy68WNK">
   <title>JS13K</title>
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -19,8 +20,8 @@
 
   <div id="viewport">
     <div id="title" class="slide playing instructions">
-      <h2>90's Movie Hacker</h2>
-      <p>Our system is all hacked!</p>
+      <h2 class="glitch">90's Movie Hacker</h2>
+      <p>The system has been hacked!</p>
       <p>Solve the puzzles before you're blocked.</p>
       <p>Find and destroy the <strong>&ldquo;404 - null pointers&rdquo;</strong>.</p>
       <!-- <p>Play puzzles to follow the footprints of the bad guys.</p>
@@ -31,9 +32,10 @@
     </div>
 
     <div class="slide playing instructions" style="transform: translate(-50%, -50%) translate3d(1000px, 0px, 0px) rotateX(0deg) rotateY(90deg) rotateZ(90deg);">
-      <p>More Explaination</p>
-      <a href="./gameTest.html">Practice</a><br/>
-      <button id="start-button" onclick="reset(true); nextSlide();  play(config.start);">Start</button>
+      <p>Additional Info:</p>
+      <!-- <button id="start-button" onclick="document.body.classList.toggle('glitch')">Toggle Movie Mode</button> -->
+      <button id="start-button" onclick="reset(true); nextSlide();  play(config.start);">Start</button><br/><br/>
+            <small><a href="./gameTest.html">Practice</a></small><br/>
       <a class="toggle-sound" onclick="toggleSound()">🔊</a>
     </div>
   </div>

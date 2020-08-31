@@ -610,3 +610,176 @@ class taptap extends game {
     }
   }
 }
+
+class findTheJack extends game{
+  constructor(container, difficulty = 20, target = 5) {
+    target = Math.min(Math.ceil(target * 0.25), 4);
+    difficulty = Math.max(difficulty, 1) * 1.3;
+    super(container, difficulty, target, "findTheJack", '3 tries to find the symbol');
+    this.tries = 3;
+    this.disable();
+  }
+
+  addPiece(winning = false) {
+    const piece = document.createElement("div");
+    piece.classList.add("piece");
+    piece.style = 'top: -200px; left: 0;';
+    if (Math.random() > 0.5) {
+      piece.classList.add('variant');
+    }
+    let emo = winning
+      ? this.winning
+      : this.emos[~~(Math.random() * this.emos.length)];
+    piece.innerHTML = `<div>${emo}</div>`;
+    if (winning) {
+      piece.classList.add("winner");
+    }
+
+    const clickstart = () => {
+      say(emo);
+      this.clickHandler(piece, winning);
+    };
+    piece.onmousedown = clickstart.bind(this);
+    piece.ontouchstart = clickstart.bind(this);
+    this.game.append(piece);
+    this.cards.push(piece);
+  }
+
+  removeCards() {
+    this.cards.forEach((c) => {
+      c.style = 'top: -200px; left: 0;';
+      setTimeout(() => {
+        c.parentNode.removeChild(c);
+      }, 1500);
+    });
+  }
+
+  clickHandler(piece, winner) {
+    this.disable();
+    this.paused = true;
+    piece.classList.add("clicked");
+
+    if (winner) {
+      say('the key');
+      this.addScore();
+
+    } else {
+      this.tries--;
+
+      this.cards.forEach((c) => {
+        c.classList.add('clicked');
+        c.classList.add('fadeOut');
+      })
+
+      if (this.tries > 0) {
+        setTimeout(() => {
+          this.removeCards();
+          setTimeout(() => {
+            this.start();
+          }, 2000);
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          this.end(false);
+        }, 2000);
+      }
+    }
+  }
+
+  addScore(plus = 1) {
+    this.current += plus;
+    this.score.innerText = this.current;
+
+    if (this.current >= this.target) {
+      this.playing = false;
+      this.paused = true;
+      setTimeout(() => {
+        this.end(true);
+      }, 1000);
+    }
+  }
+
+  squareCards() {
+    let i, j;
+    for (i = 0; i < this.square; i++) {
+      for (j = 0; j < this.square; j++) {
+        this.cards[j + this.square * i].style = `top: ${
+          (100 * (1/ this.square)) + j * (400 / this.square)
+        }px; left: ${(100 * (1/ this.square)) + i * (620 / this.square)}px;`;
+      }
+    }
+  }
+
+  shuffle(shuffNum = 0) {
+    const shuffleTime = 1800 / this.cards.length;
+    this.cards.forEach((c, i) => {
+      setTimeout(() => {
+        c.style = `top: ${randBetween(100, 300)}px; left: ${randBetween(
+          100,
+          400
+        )}px; animation-delay: ${Math.random()}s;  transform: rotate3d(-1, -${Math.random()}, 0, 180deg) scale(${0.5 + Math.random()}); background-color: ${Math.random() > 0.5 ? 'white': '#444'}`;
+      },  Math.random() * i * shuffleTime);
+    });
+
+    if (shuffNum > 0) {
+      shuffNum--;
+      setTimeout(() => {
+        this.shuffle(shuffNum);
+      }, Math.random() * this.cards.length * shuffleTime);
+    } else {
+      setTimeout(() => {
+        this.cards = this.cards.sort(() => (Math.random() > 0.5 ? 1 : -1));
+        this.squareCards();
+        say('select');
+        this.disable(false);
+        this.paused = false;
+      }, this.cards.length * shuffleTime);
+    }
+  }
+
+  setup() {
+    this.square = ~~randBetween(3, 6);
+    this.cards = [];
+    this.emos = remoji(40);
+    this.winning = '🗝️'; //this.emos.pop();
+    this.emos = ['Ɣ']; // this.emos.filter(e => e != this.winning);
+    this.instructions.innerHTML = `Find any ${this.winning}: ${this.tries} round${this.tries > 1 ? 's' : ''} remaining.`;
+    const winNum = ~~randBetween(1, Math.pow(this.square, 2) * 0.5);
+    const loseNum = Math.pow(this.square, 2) - winNum;
+    let i, j;
+    for (i = 0; i < winNum; i++) {
+      this.addPiece(true);
+    }
+    for (i = 0; i < loseNum; i++) {
+      this.addPiece(false);
+    }
+
+    this.cards = this.cards.sort(() => (Math.random() > 0.5 ? 1 : -1));
+
+    setTimeout(() => {
+      this.squareCards();
+  }, 100);
+  }
+
+  start() {
+    super.start();
+    this.playing = true;
+    this.paused = true;
+    this.beginTimer();
+    this.disable();
+    this.setup();
+    const winners = document.getElementsByClassName("winner");
+    [].forEach.call(winners, (el, i) => {
+      setTimeout(() => {
+        el.classList.add("clicked");
+        setTimeout(() => {
+          el.classList.remove("clicked");
+        }, 2000);
+      }, 500 + i * (1000 / winners.length));
+    });
+
+    setTimeout(() => {
+      this.shuffle(3);
+    }, winners.length * 100 + 3500);
+  }
+}

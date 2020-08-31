@@ -391,6 +391,9 @@ h2 {
   animation: 5s bcolor ease infinite;
   border-right: 4px solid black;
   border-bottom: 4px solid black;
+}
+
+.glitch {
   filter: url("#glitch");
 }
 
@@ -796,6 +799,56 @@ h2 {
   font-family: Arial, sans-serif;
   margin: 0 auto;
 }
+
+#findTheJack.game {
+  font-size: 45px;
+}
+#findTheJack .piece {
+  position: absolute;
+  width: 1.75em;
+  line-height: 1.75em;
+  text-align: center;
+  border: 2px solid #fff;
+  box-shadow: -5px 0 10px black;
+  height: 1.75em;
+  background: #444;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  transition: 0.5s ease transform, 1.75s ease top, 1.75s ease left, 0.5s ease background-color;
+  transform: rotate3d(-1, 1, 0, 180deg);
+  transform-style: preserve-3d;
+  cursor: pointer;
+  animation: 5s bcolor ease infinite;
+}
+#findTheJack .piece.clicked {
+  pointer-events: none;
+  transform: rotate3d(-1, 1, 0, 0deg) scale(1.15);
+  z-index: 1;
+}
+#findTheJack .piece.clicked.winner {
+  box-shadow: 0 0 10px white, 0 0 10px white, 0 0 10px white;
+  border-color: white;
+  background: white;
+}
+#findTheJack .piece div {
+  transform: translateZ(5px);
+}
+#findTheJack .piece.clicked.winner.fadeOut {
+  box-shadow: none;
+  border-color: white;
+  filter: none;
+  z-index: 10;
+  transform: scale(0.8);
+  background: white;
+}
+#findTheJack .piece.clicked.fadeOut {
+  filter: grayscale(1) brightness(0.5);
+  transform: scale(0.8);
+  background: #666;
+}
+
 
 .not-playing {
   display: none;

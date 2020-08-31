@@ -194,7 +194,7 @@ const reset = (empty = true) => {
 
 const addContent = () => {
   const c = config.currentGame;
-  const games = [taptap, controls, flipper];
+  const games = [taptap, controls, flipper, findTheJack];
   while(c === config.currentGame) {
     config.currentGame = ~~(Math.random() * games.length);
   }

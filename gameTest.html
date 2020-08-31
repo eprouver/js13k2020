@@ -2,10 +2,14 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0; user-scalable=yes;">
+  <meta name="viewport" content="width=device-width; user-scalable=yes;">
+  <meta name="monetization" content="$ilp.uphold.com/njQnNZy68WNK">
   <title>JS13K</title>
   <link rel="stylesheet" href="../style.css">
   <style>
+  body {
+    overflow; visible;
+  }
   #test-holder {
     text-align: left;
   }
@@ -34,10 +38,10 @@
     font-size: 2vw;
   }
   #tip {
-    font-size: 2em;
+    font-size: 1.5em;
     color: white;
     margin: 30px;
-        margin-right: 100px;
+    margin-right: 100px;
 }
 a.back{
   position: absolute;
@@ -60,10 +64,11 @@ a.back{
 <a class="back" href="./">Let's Play!</a>
 
 <div id="test-holder">
-  <h2>&nbsp;&nbsp;&nbsp;Practice:</h2><br/><br/>
+  <h2>&nbsp;&nbsp;&nbsp;Practice:&nbsp;</h2><br/><br/>
 <button onclick="loader(taptap, 'Bombs are always in the foreground. If it\'s too close, better not risk it.')">One</button>
 <button onclick="loader(controls, 'When the border is not red, click to match each symbol in the top bar. You can click anywhere on a dial, it always increments one setting clockwise.')">Two</button>
 <button onclick="loader(flipper, 'Try starting from top-left and go left to right, like reading a book. Easy levels can have repeat symbols.')">Three</button>
+<button onclick="loader(findTheJack, 'There is not a lot of strategy to these. Cross your fingers')">Four</button>
 <div class="practice">
   <div id="tip">
   </div>
@@ -88,7 +93,7 @@ a.back{
     const loader = (game, tipText) => {
       gameContainer.innerHTML = '';
       const myGame2 = new game(gameContainer, 1, 1);
-      tip.innerHTML = `<h2>&nbsp;&nbsp;&nbsp;Hot Tip:</h2> <p>${tipText}</p>`;
+      tip.innerHTML = `<h2>&nbsp;&nbsp;Tip:&nbsp;</h2> <p>${tipText}</p>`;
       myGame2.start();
     }
 
