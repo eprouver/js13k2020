@@ -153,7 +153,15 @@ const windowScale = () => {
   const wScale = window.innerWidth / config.width;
   config.size = hScale > wScale ? wScale : hScale;
   container.style = `transform: scale(${config.size})`;
-  document.body.style = `width:${window.innerWidth}px; height:${window.innerHeight}px;`
+  document.body.style = `width:${window.innerWidth}px; height:${window.innerHeight}px;`;
+
+  const timer = document.getElementById('timer-holder');
+  if (!timer.classList.contains('not-playing')) {
+    timer.classList.add('not-playing');
+    setTimeout(() => {
+      timer.classList.remove('not-playing');
+    }, 1500);
+  }
 };
 
 window.onresize = windowScale;
@@ -234,7 +242,7 @@ const nextSlide = (passed) => {
       say("blocked");
       play(config.block);
       ns.classList.add("failed");
-      ns.innerHTML = "<h1>😢</h1>";
+      ns.innerHTML = "<h1>😢</h1><p>Blocked</p>";
       addLeaf();
     } else if (progress < config.levelProgress) {
       config.difficulties[config.currentGame] *= config.diftimes;
@@ -254,8 +262,8 @@ const nextSlide = (passed) => {
       ns.classList.add("winning");
       container.classList.add("winning");
       config.currentLevel += 1;
-      const faces = ['😃', '😄', '😎', '😊', '🥳', '🤠','😆', '😂', '🤩', '😜', '😋'];
-      ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 1.6, faces.length))]}</h1>`;
+      const faces = ['😃', '😄', '😎', '😊', '🥳', '🤠','😆', '😁', '🤩', '😜', '😋', '😲'];
+      ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 2, faces.length))]}</h1>`;
       selectNewVoice();
 
       setTimeout(() => {

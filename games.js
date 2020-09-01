@@ -1,4 +1,4 @@
-let emojis = ['🐵', '🐶', '🐺', '🦊', '🐱', '🦁', '🐯', '🐴', '🦄', '🐮','🐷', '🐗', '🐭', '🐁', '🐀', '🐹', '🐰','🦇', '🐻', '🐨', '🐼', '🐔', '🐸', '🐲', '🐳', '🐬', '🐠', '🐚', '🦋', '🐌', '🐜', '🐞', '🌸', '🥀', '🌳', '🌴', '🌵', '🍁', '🍇', '🍉', '🍊', '🍋', '🍌', '🍍', '🍎', '🍏', '🍐', '🍑', '🍒', '🍓', '🥝', '🍅', '🥑', '🍆', '🥔', '🥕', '🌽', '🥒', '🍄', '🥜', '🌰', '🥐', '🥖', '🥞', '🧀', '🍗', '🥓', '🍔', '🍟', '🍕', '🌭', '🌮', '🥗', '🍤', '🍦','🍩', '🍪', '🍰', '🍫', '🍬', '🍭', '👦🏻', '👦🏼', '👦🏽', '👦🏾', '👦🏿', '👧🏻', '👧🏼', '👧🏽', '👧🏾', '👧🏿', '👨🏻', '👨🏼', '👨🏽', '👨🏾', '👨🏿','👩🏻', '👩🏼', '👩🏽', '👩🏾', '👩🏿', '👴🏻', '👴🏼', '👴🏽', '👴🏾', '👴🏿', '👵🏻', '👵🏼', '👵🏽', '👵🏾', '👵🏿', '👶🏻', '👶🏼', '👶🏽', '👶🏾', '👶🏿'];
+let emojis = ['🐵', '🐶', '🐺', '🦊', '🐱', '🦁', '🐯', '🐴', '🦄', '🐮','🐷', '🐗', '🐭', '🐁', '🐀', '🐹', '🐰','🦇', '🐻', '🐨', '🐼', '🐔','🦢', '🐸', '🐲', '🐳', '🐬', '🐠', '🐚', '🦋', '🐌', '🐜', '🐞', '🌸', '🥀', '🌳', '🌴', '🌵', '🍁', '🍇', '🍉', '🍊', '🍋', '🍌', '🍍', '🍎', '🍏', '🍐', '🍑', '🍒', '🍓', '🥝', '🍅', '🥥', '🥑', '🍆', '🥔', '🥕', '🌽', '🥒', '🍄', '🥜', '🌰', '🥐', '🥖', '🥞', '🧀', '🍗', '🥓', '🍔', '🍟', '🍕', '🌭', '🌮', '🥗', '🍤', '🍦','🍩', '🍪', '🍰', '🍫', '🍬', '🍭', '🧉', '👦🏻', '👦🏼', '👦🏽', '👦🏾', '👦🏿', '👧🏻', '👧🏼', '👧🏽', '👧🏾', '👧🏿', '👨🏻', '👨🏼', '👨🏽', '👨🏾', '👨🏿','👩🏻', '👩🏼', '👩🏽', '👩🏾', '👩🏿', '👴🏻', '👴🏼', '👴🏽', '👴🏾', '👴🏿', '👵🏻', '👵🏼', '👵🏽', '👵🏾', '👵🏿', '👶🏻', '👶🏼', '👶🏽', '👶🏾', '👶🏿', '👠', "👽", "🧠", "🦷", "🌎"];
 
 const remoji = (length) => {
   let arr = [];
@@ -260,10 +260,18 @@ class controls extends game {
   }
 
   makeKeyPad() {
-    const emos = [["💛", "💚", "💜", "💙"],
-                 ["🇫🇷","🇨🇦","🇨🇩", "🇩🇿"],
-                   ["不","思","可","议"],
-                 ["☀️","⛄","🍂", "🌻"]][~~(Math.random() * 3)];
+    const emos = [
+      ["💛", "💚", "💜", "💙"],
+      ["🇫🇷", "🇨🇦", "🇨🇩", "🇩🇿"],
+      ["不", "思", "可", "议"],
+      ["☀️", "⛄", "🍂", "🌷"],
+      ["🥃", "🍺", "🍹", "🍷"],
+      ["🚑", "🚒", "🚓", "🚕"],
+      ["🎃", "🎅", "🦃", "☘️"],
+      ["💀", "⚰️", "🧟", "👻"],
+      ["👂", "👁️", "👄", "👃"],
+      ["동","서","문","답"],
+    ][~~(Math.random() * 10)];
     const holder = document.createElement("div");
     holder.classList.add("control");
 
@@ -334,7 +342,7 @@ class controls extends game {
     const rand = Math.random();
 
     switch (true) {
-      case rand < 0.2 && !this.keypad:
+      case rand < 0.3 && !this.keypad:
         this.keypad = true;
         return this.makeKeyPad();
         break;
@@ -370,7 +378,7 @@ class controls extends game {
     this.loading = true;
     this.targetSeq = [];
     const controls = document.querySelectorAll("#controls .control");
-    const symb = ~~(Math.random() * this.difficulty) + ~~(Math.random() * this.difficulty * 0.75) + Math.max(config.currentLevel, 4);
+    const symb = ~~(Math.random() * this.difficulty) + ~~(Math.random() * this.difficulty * 0.75) + Math.max(config.currentLevel, 2);
 
     for (let i = 0; i < symb; i++) {
       setTimeout(() => {
@@ -397,7 +405,7 @@ class controls extends game {
     this.lockmsg.classList.add('locks');
     this.game.append(this.lockmsg);
     let thisRow, numRows = 0;
-    let numCtrls = (this.difficulty * 1.3) + ~~(Math.random() * (this.difficulty / this.target)) + (this.target * 0.35);
+    let numCtrls = (this.difficulty) + ~~(Math.random() * (this.difficulty / this.target)) + (config.currentLevel * 0.35);
     this.keypad = false;
 
     while (numCtrls > 0 && numRows < 5) {
@@ -615,8 +623,9 @@ class findTheJack extends game{
   constructor(container, difficulty = 20, target = 5) {
     target = Math.min(Math.ceil(target * 0.25), 4);
     difficulty = Math.max(difficulty, 1) * 1.3;
-    super(container, difficulty, target, "findTheJack", '3 tries to find the symbol');
-    this.tries = 3;
+    const tries = Math.max(1, ~~(4 - config.currentLevel * 0.3));
+    super(container, difficulty, target, "findTheJack", `${tries} tries to find a key`);
+    this.tries = tries;
     this.disable();
   }
 
@@ -738,13 +747,12 @@ class findTheJack extends game{
   }
 
   setup() {
-    this.square = ~~randBetween(3, 6);
+    this.square = Math.min(1 + config.currentLevel, 4);
     this.cards = [];
-    this.emos = remoji(40);
-    this.winning = '🗝️'; //this.emos.pop();
-    this.emos = ['Ɣ']; // this.emos.filter(e => e != this.winning);
-    this.instructions.innerHTML = `Find any ${this.winning}: ${this.tries} round${this.tries > 1 ? 's' : ''} remaining.`;
-    const winNum = ~~randBetween(1, Math.pow(this.square, 2) * 0.5);
+    this.winning = '🗝️';
+    this.emos = ['Ɣ'];
+    this.instructions.innerHTML = `Find any ${this.winning}: ` + (this.tries > 1 ? `${this.tries} rounds remaining.`: 'Last Round');
+    const winNum = Math.min(~~(this.square * this.square * 0.5), ~~randBetween(1, (Math.pow(this.square, 2) - 2) / (Math.random() * this.difficulty)));
     const loseNum = Math.pow(this.square, 2) - winNum;
     let i, j;
     for (i = 0; i < winNum; i++) {

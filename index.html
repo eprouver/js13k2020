@@ -20,7 +20,7 @@
 
   <div id="viewport">
     <div id="title" class="slide playing instructions">
-      <h2 class="glitch">90's Movie Hacker</h2>
+      <h2 class="glitch" onclick="if(!isMobile) { document.body.classList.toggle('glitch'); }">90's Movie Hacker</h2>
       <p>The system has been hacked!</p>
       <p>Solve the puzzles before you're blocked.</p>
       <p>Find and destroy the <strong>&ldquo;404 - null pointers&rdquo;</strong>.</p>
@@ -32,10 +32,11 @@
     </div>
 
     <div class="slide playing instructions" style="transform: translate(-50%, -50%) translate3d(1000px, 0px, 0px) rotateX(0deg) rotateY(90deg) rotateZ(90deg);">
-      <p>Additional Info:</p>
-      <!-- <button id="start-button" onclick="document.body.classList.toggle('glitch')">Toggle Movie Mode</button> -->
-      <button id="start-button" onclick="reset(true); nextSlide();  play(config.start);">Start</button><br/><br/>
-            <small><a href="./gameTest.html">Practice</a></small><br/>
+      <p>More Info:</p>
+      <p>Become a <strong><a href="https://coil.com/explore" target="_BLANK">Coil</a></strong> member to support creators.</p>
+      <p>Good Luck!</p>
+      <button id="start-button" onclick="reset(true); nextSlide();  play(config.start);">Let's Go!</button><br/><br/>
+            <p>You can <a href="./gameTest.html">Practice</a> here.</p>
       <a class="toggle-sound" onclick="toggleSound()">🔊</a>
     </div>
   </div>
