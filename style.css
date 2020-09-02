@@ -263,6 +263,11 @@ svg#defs {
   transition: all 1000ms ease-in-out 0ms;
   text-align: center;
   font-size: 24px;
+  border-radius: 5px;
+}
+
+.slide p {
+  letter-spacing: -0.5px;
 }
 
 @keyframes bcolor {
@@ -310,7 +315,7 @@ svg#defs {
   color: #052040;
   border: 5px solid #00356b;
   transition: opacity 0.25s ease, background 400ms ease,
-    border 120ms ease;
+  border 120ms ease;
   text-shadow: 2px 2px 0 #00356b;
 }
 
@@ -423,7 +428,7 @@ h2 {
   align-items: center;
   justify-content: center;
   transform: translateY(100%);
-  transition: all 1s ease;
+  transition: all 0.5s ease-out;
 }
 
 #taptap .piece {
@@ -627,7 +632,7 @@ h2 {
   background: white;
   box-shadow: 0 0 5px white;
   border: 2px solid white;
-  color: white;
+  color: '#eee';
 }
 
 #controls .control.winner .dial:before {
@@ -635,7 +640,7 @@ h2 {
 }
 
 #controls .key-holder {
-  font-size: 0.4em;
+  font-size: 0.32em;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -658,6 +663,7 @@ h2 {
   border-radius: 0.2em;
   background: #afafaf;
   transition: all 0.2s ease;
+  min-width: 1.5em;
 }
 
 #controls .key-button:hover {
@@ -802,6 +808,20 @@ h2 {
   margin: 0 auto;
 }
 
+.game-instruction .attn {
+  font-size: 2.5em;
+      color: #666666;
+      display: inline-block;
+      position: absolute;
+      left: 0;
+}
+
+#first-emo {
+  line-height: 1em;
+font-size: 4em;
+margin: 0.3em;
+}
+
 #findTheJack.game {
   font-size: 45px;
 }
@@ -811,7 +831,6 @@ h2 {
   line-height: 1.75em;
   text-align: center;
   border: 2px solid #fff;
-  /* box-shadow: -5px 0 10px black; */
   height: 1.75em;
   background: #444;
   border-radius: 5px;
@@ -822,7 +841,8 @@ h2 {
   transform: rotate3d(-1, 1, 0, 180deg);
   transform-style: preserve-3d;
   cursor: pointer;
-  /* animation: 5s bcolor ease infinite; */
+  margin-top: -1em;
+  margin-left: -1em;
 }
 #findTheJack .piece.clicked {
   pointer-events: none;
@@ -846,9 +866,8 @@ h2 {
   background: white;
 }
 #findTheJack .piece.clicked.fadeOut {
-  filter: grayscale(1) brightness(0.5);
   transform: scale(0.8);
-  background: #666;
+  background: #333;
 }
 
 .not-playing {
@@ -864,12 +883,12 @@ h2 {
   top: 0;
   left: 0;
   transition: opacity 0.5s ease;
+  filter: blur(2px);
 }
 
 svg#timer {
   width: 100%;
   height: 100%;
-  filter: blur(1px);
 }
 
 #timer #timer-path {

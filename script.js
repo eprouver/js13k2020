@@ -202,7 +202,7 @@ const reset = (empty = true) => {
 
 const addContent = () => {
   const c = config.currentGame;
-  const games = [taptap, controls, flipper, findTheJack];
+  const games = [taptap, controls, controls2, flipper, findTheJack];
   while(c === config.currentGame) {
     config.currentGame = ~~(Math.random() * games.length);
   }
@@ -251,7 +251,7 @@ const nextSlide = (passed) => {
       say("for oh for. null pointer");
       play(config.four);
       ns.classList.add("finished");
-      ns.innerHTML = "<h1>404</h1><p>You found a null pointer!</p>";
+      ns.innerHTML = "<h1 class='glitch'>404</h1><p>You found a null pointer!</p>";
       progress += config.winProgress;
     } else {
       config.timeLimit -= 10;
@@ -292,6 +292,7 @@ const nextSlide = (passed) => {
     viewport.classList.remove('loading');
     container.style = `transform: scale(${config.size / (config.startProgress * config.zoomScaler / 850)})`;
   }, 5 * config.endingSpeed);
+
   setTimeout(() => {
     if (oldNS && passed) {
       oldNS.innerHTML = '';
