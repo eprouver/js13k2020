@@ -317,6 +317,7 @@ svg#defs {
   transition: opacity 0.25s ease, background 400ms ease,
   border 120ms ease;
   text-shadow: 2px 2px 0 #00356b;
+  transition: none !important;
 }
 
 .slide.hidden {
@@ -390,7 +391,7 @@ h2 {
   letter-spacing: -2px;
   color: #ffa0fb;
   text-shadow: 2px 2px 2px #5000ff;
-  transform: scale(1.2) rotate(6deg);
+  transform: scale(1.2) rotate(6deg) translateZ(10px);
   background: #222222;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 36px;
@@ -817,9 +818,11 @@ h2 {
 }
 
 #first-emo {
-  line-height: 1em;
-font-size: 4em;
-margin: 0.3em;
+  line-height: 1.5em;
+  font-size: 4em;
+  margin: 0 0.3em;
+  background: #a3a3a3;
+  border-radius: 5px;
 }
 
 #findTheJack.game {
@@ -827,6 +830,16 @@ margin: 0.3em;
 }
 #findTheJack .piece {
   position: absolute;
+  transform-style: preserve-3d;
+  margin-top: -1em;
+  margin-left: -1em;
+  transition: transform 1s ease;
+  top: 0;
+  left: 0;
+  background: none;
+}
+
+#findTheJack .card {
   width: 1.75em;
   line-height: 1.75em;
   text-align: center;
@@ -837,27 +850,34 @@ margin: 0.3em;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  transition: 0.5s ease transform, 1.75s ease top, 1.75s ease left, 0.5s ease background-color;
   transform: rotate3d(-1, 1, 0, 180deg);
   transform-style: preserve-3d;
   cursor: pointer;
-  margin-top: -1em;
-  margin-left: -1em;
+  transition: transform 0.5s ease, background-color 0.5s ease;
 }
-#findTheJack .piece.clicked {
+
+#findTheJack .white .card {
+  background: white;
+}
+#findTheJack .variant .card {
+  background: #444;
+  border-color: #444;
+}
+
+#findTheJack .card.clicked {
   pointer-events: none;
   transform: rotate3d(-1, 1, 0, 0deg) scale(1.15);
   z-index: 1;
 }
-#findTheJack .piece.clicked.winner {
+#findTheJack .card.clicked.winner {
   box-shadow: 0 0 10px white, 0 0 10px white, 0 0 10px white;
   border-color: white;
   background: white;
 }
-#findTheJack .piece div {
+#findTheJack .card div {
   transform: translateZ(5px);
 }
-#findTheJack .piece.clicked.winner.fadeOut {
+#findTheJack .card.clicked.winner.fadeOut {
   box-shadow: none;
   border-color: white;
   filter: none;
@@ -865,9 +885,10 @@ margin: 0.3em;
   transform: scale(0.8);
   background: white;
 }
-#findTheJack .piece.clicked.fadeOut {
+#findTheJack .card.clicked.fadeOut {
   transform: scale(0.8);
   background: #333;
+  border-color: #333;
 }
 
 .not-playing {

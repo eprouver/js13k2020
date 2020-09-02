@@ -238,7 +238,7 @@ const nextSlide = (passed) => {
     ns.classList.remove("playing");
     if (!passed) {
       config.timeLimit += 15;
-      config.difficulties = config.difficulties.map(d => d * 0.8);
+      config.difficulties = config.difficulties.map(d => d * 0.9);
       say("blocked");
       play(config.block);
       ns.classList.add("failed");
@@ -262,7 +262,7 @@ const nextSlide = (passed) => {
       ns.classList.add("winning");
       container.classList.add("winning");
       config.currentLevel += 1;
-      const faces = ['😃', '😄', '😎', '😊', '🥳', '🤠','😆', '😁', '🤩', '😜', '😋', '😲'];
+      const faces = ['😃', '😄', '😎', '😊', '🤠','😆', '😁', '🤩', '😜', '😋', '😲'];
       ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 2, faces.length))]}</h1>`;
       selectNewVoice();
 
