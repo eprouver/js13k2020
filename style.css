@@ -326,9 +326,11 @@ svg#defs {
 }
 
 .slide.playing {
-  border: 5px solid #fbfbd7;
-  background: #ccc;
-  overflow: hidden;
+  border: 5px solid #11ba58;
+      background: #adadad;
+      overflow: hidden;
+      box-shadow: 0 0 3px 0px #11ba58;
+      color: black;
 }
 
 .slide.loading {

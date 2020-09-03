@@ -25,7 +25,7 @@ const config = {
   endingSpeed: 200,
   explodeScale: 2300,
   languages: [],
-  difficulties: [1, 1, 2],
+  difficulties: [1, 1, 1, 1, 1],
   targets: [1, 1, 1],
   diftimes: 1.55,
   tartimes: 1.75,
