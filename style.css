@@ -1,59 +1,50 @@
-/* @font-face {
-  font-family: emoji;
-  src: url(//xem.github.io/emoji/noto.ttf), url(//xem.github.io/emoji/twemoji.ttf);
-} */
 * {
   box-sizing: border-box;
   touch-action: manipulation !important;
-  font-family: arial, sans-serif;
+  font-family: arial, sans-serif
 }
 
-html, body, #timer {
+#timer, body, html {
   position: fixed;
   overflow: hidden;
   width: -moz-available;
-  /* WebKit-based browsers will ignore this. */
   width: -webkit-fill-available;
-  /* Mozilla-based browsers will ignore this. */
   width: fill-available;
   height: -moz-available;
-  /* WebKit-based browsers will ignore this. */
   height: -webkit-fill-available;
-  /* Mozilla-based browsers will ignore this. */
   height: fill-available;
   max-height: 100vh;
-  max-width: 100vw;
+  max-width: 100vw
 }
 
 body {
   position: relative;
-  background: #111;
+  background: #262626;
   user-select: none;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
-  transition: background 1s ease;
+  transition: background 1s ease
 }
 
 button {
-  border: 2px solid black;
+  border: 2px solid #000;
   margin: 5px;
   padding: 10px;
   width: auto;
   overflow: visible;
-  background: transparent;
+  background: 0 0;
   color: inherit;
   font: inherit;
   line-height: normal;
-  -webkit-appearance: none;
+  -webkit-appearance: none
 }
 
 svg#defs {
-  display: none;
+  display: none
 }
 
-/* start minimap */
 #bar {
   text-align: center;
   height: 100%;
@@ -62,30 +53,30 @@ svg#defs {
   flex-direction: column;
   box-sizing: border-box;
   transform: translateX(-100%);
-  transition: transform 0.25s ease;
+  transition: transform .25s ease
 }
 
-#bar-holder:hover #bar, #bar-holder.active #bar, #bar-holder.show #bar {
-  transform: translateX(0);
+#bar-holder.active #bar, #bar-holder.show #bar, #bar-holder:hover #bar {
+  transform: translateX(0)
 }
 
 #bar p {
-  color: white;
+  color: #fff;
   font-size: 18px;
-  line-height: 0px;
-  font-family: arial;
+  line-height: 0;
+  font-family: arial
 }
 
 .branch {
   width: 100%;
   background: #555;
-  color: white;
-  height: 6px;
+  color: #fff;
+  height: 6px
 }
 
 .leaves {
   display: flex;
-  flex-grow: 1;
+  flex-grow: 1
 }
 
 .leaf {
@@ -93,8 +84,8 @@ svg#defs {
   position: relative;
   font-size: 0;
   opacity: 0;
-  background: none;
-  height: 0;
+  background: 0 0;
+  height: 0
 }
 
 .leaf:before {
@@ -107,13 +98,13 @@ svg#defs {
   display: block;
   margin: 0 auto;
   font-size: 15px;
-  transition: all 0.25s ease;
-  left: 1px;
+  transition: all .25s ease;
+  left: 1px
 }
 
 .leaf.ended:before {
-  background: #f00;
-  top: 40%;
+  background: red;
+  top: 40%
 }
 
 .leaf:after {
@@ -124,14 +115,14 @@ svg#defs {
   top: 0;
   border-style: dotted;
   box-sizing: border-box;
-  transition: all 0.25s ease;
+  transition: all .25s ease
 }
 
 .leaf.finished:before {
   content: '🔍';
-  transition: all 0.25s ease;
+  transition: all .25s ease;
   font-size: 0;
-  background: none;
+  background: 0 0
 }
 
 .leaf.finished:after {
@@ -141,30 +132,30 @@ svg#defs {
   border: 3px solid #369a36;
   top: 0;
   box-sizing: border-box;
-  margin-left: -2px;
+  margin-left: -2px
 }
 
 .leaf.testing:after {
-  height: 60%;
+  height: 60%
 }
 
 .leaf.testing:before {
   content: '';
   top: 60%;
-  width: auto;
+  width: auto
 }
 
-.leaf.testing, .leaf.finished, .leaf.ended {
+.leaf.ended, .leaf.finished, .leaf.testing {
   font-size: 3em;
   opacity: 1;
-  height: auto;
+  height: auto
 }
 
 .leaf.testing:before {
   content: '👀';
-  background: none;
+  background: 0 0;
   font-size: 1em;
-  filter: none;
+  filter: none
 }
 
 #bar-holder {
@@ -172,86 +163,84 @@ svg#defs {
   height: 90vh;
   position: absolute;
   left: 0;
-  font-size: 10px;
+  font-size: 10px
 }
 
-#bar.complete .leaf.finished:after, #bar.complete .branch {
-  border-color: magenta;
-  background: magenta;
-  color: magenta;
+#bar.complete .branch, #bar.complete .leaf.finished:after {
+  border-color: #f0f;
+  background: #f0f;
+  color: #f0f;
   transition: all 1s ease;
-  font-size: 0.5em;
+  font-size: .5em
 }
 
-/* end minimap */
 #searching {
   height: 1em;
   width: 1em;
   border-radius: 1em;
-  border: 12px solid rgba(1, 255, 112, 0.24);
+  border: 12px solid rgba(1, 255, 112, .24);
   position: absolute;
   font-size: 50vh;
-  margin-top: 0.5em;
+  margin-top: .5em;
   transform-origin: 50% 50%;
   transform: scale(0);
   opacity: 0;
   border-style: dashed;
-  pointer-events: none;
+  pointer-events: none
 }
 
 #searching.expand {
   opacity: 1;
   transform: scale(50) rotate(-800deg);
-  transition: transform 6s linear 200ms;
+  transition: transform 6s linear .2s
 }
 
 .toggle-sound {
-  background: none;
+  background: 0 0;
   border: none;
   position: absolute;
   top: 10px;
   right: 10px;
   cursor: pointer;
+  color: #777
 }
 
 .mobile .toggle-sound {
-  display: none;
+  display: none
 }
 
 #container {
   position: absolute;
   transform-origin: left top;
-  transition: all 1100ms ease-in-out 400ms;
+  transition: all 1.1s ease-in-out .4s;
   transform-style: preserve-3d;
   top: 50%;
   left: 50%;
-  perspective: 6500px;
+  perspective: 6500px
 }
 
-#container.winning .slide.finished,
-#container.winning .slide.failed, #container.winning .slide.dummy {
-  display: none;
+#container.winning .slide.dummy, #container.winning .slide.failed, #container.winning .slide.finished {
+  display: none
 }
 
-#container.playing .slide.finished,
-#container.playing .slide.failed, #container.playing .slide.dummy {
+#container.playing .slide.dummy, #container.playing .slide.failed, #container.playing .slide.finished {
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none
 }
 
 #container.loading {
-  pointer-events: none;
+  pointer-events: none
 }
 
 #viewport {
   position: absolute;
   transform-origin: left top;
-  transition: all 600ms ease-in-out;
-  transform-style: preserve-3d;
+  transition: all .6s ease-in-out;
+  transform-style: preserve-3d
 }
 
 #viewport.loading {
-  display: none;
+  display: none
 }
 
 .slide {
@@ -260,14 +249,14 @@ svg#defs {
   width: 605px;
   height: 500px;
   font-family: emoji, helvetica, arial, sans-serif;
-  transition: all 1000ms ease-in-out 0ms;
+  transition: all 1s ease-in-out 0;
   text-align: center;
   font-size: 24px;
-  border-radius: 5px;
+  border-radius: 5px
 }
 
 .slide p {
-  letter-spacing: -0.5px;
+  letter-spacing: -.5px
 }
 
 @keyframes bcolor {
@@ -292,57 +281,54 @@ svg#defs {
   }
 }
 
-.slide-canvas, .slide .explode-copy {
+.slide .explode-copy, .slide-canvas {
   position: absolute;
   width: 605px;
   height: 500px;
   top: 0;
   left: 0;
   transition: transform ease-in-out, opacity ease-in, filter ease-out;
-  pointer-events: none;
+  pointer-events: none
 }
 
 .slide.failed {
   background: #a11;
   color: #400;
   border: 5px solid red;
-  transition: opacity 0.25s ease, background 400ms ease,
-  border 120ms ease;
+  transition: opacity .25s ease, background .4s ease, border 120ms ease
 }
 
 .slide.finished {
   background: #148;
   color: #052040;
   border: 5px solid #00356b;
-  transition: opacity 0.25s ease, background 400ms ease,
-  border 120ms ease;
+  transition: opacity .25s ease, background .4s ease, border 120ms ease;
   text-shadow: 2px 2px 0 #00356b;
-  transition: none !important;
+  transition: none !important
 }
 
 .slide.hidden {
   background-color: transparent;
-  border-color: transparent;
+  border-color: transparent
 }
 
 .slide.playing {
-  border: 5px solid #11ba58;
-      background: #adadad;
-      overflow: hidden;
-      box-shadow: 0 0 3px 0px #11ba58;
-      color: black;
+  border: 5px solid #fbfbd7;
+  background: #ccc;
+  overflow: hidden;
+  transition: all 1s ease
 }
 
 .slide.loading {
-  border: 50px solid yellow;
+  border: 50px solid #ff0;
   opacity: 1;
-  transition: background 1s ease, border 100ms ease;
+  transition: all 1s ease
 }
 
 .slide.winning {
   background: #01ff70;
   box-shadow: 0 0 0 2000px #01ff70;
-  transition: opacity 0.15s ease-in-out 2.5s, box-shadow 1s ease;
+  transition: opacity .15s ease-in-out 2.5s, box-shadow 1s ease
 }
 
 .slide.winning:before {
@@ -351,7 +337,7 @@ svg#defs {
   font-size: 130px;
   top: 200px;
   left: 130px;
-  animation: ease 0.5s infinite alternate bounce;
+  animation: ease .5s infinite alternate bounce
 }
 
 .slide.winning:after {
@@ -361,63 +347,65 @@ svg#defs {
   top: 200px;
   right: 130px;
   transform: scaleX(-1);
-  animation: ease 0.5s infinite alternate bounce;
+  animation: ease .5s infinite alternate bounce
 }
 
 .slide.dummy {
   background: #222;
+  border: 2px solid #000;
+  transition: opacity .5s ease
 }
 
 @keyframes bounce {
   0% {
-    margin-top: 0px;
+    margin-top: 0
   }
 
   50% {
-    margin-top: -50px;
+    margin-top: -50px
   }
 
   100% {
-    margin-top: 0px;
+    margin-top: 0
   }
 }
 
 h1 {
-  font-size: 170px;
+  font-size: 170px
 }
 
 h2 {
-  margin: 10px 0 20px 0;
+  margin: 10px 0 20px;
   font-size: 60px;
   line-height: 80px;
   letter-spacing: -2px;
   color: #ffa0fb;
   text-shadow: 2px 2px 2px #5000ff;
   transform: scale(1.2) rotate(6deg) translateZ(10px);
-  background: #222222;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+  background: #222;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .5);
   margin-bottom: 36px;
   animation: 5s bcolor ease infinite;
-  border-right: 4px solid black;
-  border-bottom: 4px solid black;
+  border-right: 4px solid #000;
+  border-bottom: 4px solid #000
 }
 
 .glitch {
-  filter: url("#glitch");
+  filter: url(#glitch)
 }
 
 #start-button {
   font-size: 40px;
   width: 60%;
   margin-top: 30px;
-  box-shadow: 0 0 2px 2px #aaa, inset 0 0 2px 2px #aaa;
+  box-shadow: 0 0 2px 2px #aaa, inset 0 0 2px 2px #aaa
 }
 
 .slide.playing.instructions {
   border: 5px solid #19eded;
   animation: 3s bcolor ease infinite;
   padding: 20px;
-  overflow: visible;
+  overflow: visible
 }
 
 .game {
@@ -430,8 +418,8 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(100%);
-  transition: all 0.5s ease-out;
+  transform: translateY(110%);
+  transition: all .5s ease-out
 }
 
 #taptap .piece {
@@ -440,17 +428,17 @@ h2 {
   position: absolute;
   transition: transform linear;
   border-radius: 1em;
-  cursor: pointer;
+  cursor: pointer
 }
 
 #taptap .piece.bad {
   transform-origin: 50% 50%;
   font-size: 1.2em;
-  z-index: 1;
+  z-index: 1
 }
 
 #taptap .piece.bad div {
-  animation: 2s steps(1) 0s infinite normal both running pulsate-fwd;
+  animation: 2s steps(1) 0 infinite normal both running pulsate-fwd
 }
 
 @keyframes pulsate-fwd {
@@ -465,12 +453,12 @@ h2 {
 
 #taptap .piece.left {
   left: -20%;
-  margin-left: -1em;
+  margin-left: -1em
 }
 
 #taptap .piece.right {
   left: 120%;
-  margin-left: 0;
+  margin-left: 0
 }
 
 #flipper .row {
@@ -479,72 +467,72 @@ h2 {
   flex-grow: 1;
   align-items: center;
   justify-content: space-around;
-  transform: translateZ(60px);
+  transform: translateZ(60px)
 }
 
 #flipper .piece {
   width: 30%;
   text-align: center;
-  border: 2px solid black;
+  border: 1px solid #000;
   height: 90%;
   background: #5e278f;
-  box-shadow: inset 0 0 20px black;
+  box-shadow: inset 0 0 20px #000;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  transition: 0.5s ease all;
+  transition: .5s ease all;
   transform: rotate3d(-1, 1, 0, 180deg);
   transform-style: preserve-3d;
   cursor: pointer;
-  z-index: 1;
+  z-index: 1
 }
 
 #flipper .piece:after {
   content: '';
-  background: white;
+  background: #fff;
   height: 100%;
   width: 100%;
   position: absolute;
   top: 0;
-  transform: translateZ(1px);
+  transform: translateZ(1px)
 }
 
 #flipper .piece:before {
   content: 'click';
   position: absolute;
-  font-size: 0.5em;
+  font-size: .5em;
   transform: scaleY(-1);
   top: 0;
-  color: #8149b3;
+  color: #8149b3
 }
 
 #flipper .piece.clicked {
   pointer-events: none;
   transform: rotate3d(-1, 1, 1, 0deg) translateY(-10px);
-  z-index: 1;
+  z-index: 1
 }
 
 #flipper .piece svg {
-  transform: translateZ(5px);
+  transform: translateZ(5px)
 }
 
 #flipper .piece.finished {
   pointer-events: none;
   opacity: 0;
-  transform: rotate3d(0, 1, 0, 300deg) scale(2);
+  transform: rotate3d(0, 1, 0, 300deg) scale(2)
 }
 
 .game.disabled {
-  pointer-events: none;
+  pointer-events: none
 }
 
 #controls.game, #flipper.game {
   display: flex;
-  flex-direction: column;
+  flex-direction: column
 }
 
 #controls.lock-msg {
-  box-shadow: inset 0 0 0 26px red;
+  box-shadow: inset 0 0 0 26px red
 }
 
 #controls .c-holder {
@@ -555,54 +543,51 @@ h2 {
   width: 100%;
   height: 100%;
   justify-content: space-around;
-  z-index: 2;
+  z-index: 2
 }
 
 #controls .dial-pos, #controls .tog-holder {
   position: relative;
   height: 1.5em;
-  width: 1.5em;
+  width: 1.5em
 }
 
 #controls .tog-holder {
   border: 2px solid #afafaf;
-  background: rgba(220, 220, 220, 0.65);
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 6px 11px #444;
-}
-
-#controls .tog-holder {
+  background: rgba(220, 220, 220, .65);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, .5), 0 6px 11px #444;
   text-align: center;
   transform-style: preserve-3d;
-  transition: all 0.5s ease;
+  transition: all .5s ease
 }
 
 #controls .tog-holder.flipped {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg)
 }
 
 #controls .tog-holder.flipped .tog-back {
-  text-shadow: 0 0 0.1em white;
+  text-shadow: 0 0 .1em #fff
 }
 
 #controls .tog-holder.flipped .tog-front {
-  text-shadow: 0 0 0.1em black;
+  text-shadow: 0 0 .1em #000
 }
 
-#controls .tog-holder .tog-front, #controls .tog-holder .tog-back {
+#controls .tog-holder .tog-back, #controls .tog-holder .tog-front {
   position: absolute;
   width: 100%;
   line-height: 1.55em;
-  transition: text-shadow 0.5s ease 0.25s;
+  transition: text-shadow .5s ease .25s
 }
 
 #controls .tog-holder .tog-front {
   transform: translateZ(1px);
-  text-shadow: 0 0 0.1em white;
+  text-shadow: 0 0 .1em #fff
 }
 
 #controls .tog-holder .tog-back {
   transform: translateZ(-1px) scaleX(-1);
-  text-shadow: 0 0 0.1em black;
+  text-shadow: 0 0 .1em #000
 }
 
 #controls .control {
@@ -614,7 +599,7 @@ h2 {
   cursor: pointer;
   align-items: center;
   transition: none;
-  transform: translateZ(60px);
+  transform: translateZ(60px)
 }
 
 #controls .lock-msg {
@@ -623,180 +608,180 @@ h2 {
   z-index: 1;
   transform: translateZ(10px);
   padding: 10px;
-  text-shadow: 1px -1px 2px white;
+  text-shadow: 1px -1px 2px #fff;
   top: 25%;
   bottom: 1.45em;
   font-size: 3em;
-  opacity: 0.3;
+  opacity: .3
 }
 
 #controls .control.winner .dial, #controls .control.winner .key-button, #controls .control.winner .tog-holder {
-  transition: all 0.5s ease;
-  background: white;
-  box-shadow: 0 0 5px white;
-  border: 2px solid white;
-  color: '#eee';
+  transition: all .5s ease;
+  background: #fff;
+  box-shadow: 0 0 5px #fff;
+  border: 2px solid #fff;
+  color: #000
 }
 
 #controls .control.winner .dial:before {
-  border-left: 0.5em solid white;
+  border-left: .5em solid #fff
 }
 
 #controls .key-holder {
-  font-size: 0.32em;
+  font-size: .32em;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   padding: 1px;
-  transition: all 0.25s ease;
+  transition: all .25s ease
 }
 
 #controls .key-holder.emph .key-button {
-  background: yellow;
+  background: #ff0
 }
 
 #controls .key-button {
   font-size: 1.9em;
   text-align: center;
-  margin: 0.06em;
+  margin: .06em;
   flex-grow: 1;
-  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee, 0 5px 0 #888, 0 5px 5px 1px black;
+  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee, 0 5px 0 #888, 0 5px 5px 1px #000;
   height: 1.25em;
   line-height: 1.25em;
-  border-radius: 0.2em;
+  border-radius: .2em;
   background: #afafaf;
-  transition: all 0.2s ease;
-  min-width: 1.5em;
+  transition: all .2s ease;
+  min-width: 1.5em
 }
 
 #controls .key-button:hover {
   transform: translateY(5px);
-  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee, 0 0 0 #888;
+  box-shadow: inset 0 0 0 1px #444, inset 0 0 20px #eee, 0 0 0 #888
 }
 
 #controls .key-row {
   display: flex;
-  flex-direction: row;
+  flex-direction: row
 }
 
 #controls .dial-holder {
   position: absolute;
   display: flex;
-  left: -0.25em;
-  font-size: 0.65em;
+  left: -.25em;
+  font-size: .65em;
   align-self: center;
   width: 3em;
-  height: 2.25em;
+  height: 2.25em
 }
 
-#controls .dial-holder div[class*="setting"] {
+#controls .dial-holder div[class*=setting] {
   position: absolute;
-  font-size: 0.5em;
+  font-size: .5em;
   left: 3em;
   border-radius: 1em;
   height: 1em;
-  transition: all 0.25s ease;
-  line-height: 1.3em;
+  transition: all .25s ease;
+  line-height: 1.3em
 }
 
 #controls .dial-holder .setting1 {
-  top: 0.05em;
+  top: .05em
 }
 
 #controls .dial-holder .setting2 {
   top: 1.7em;
-  margin-left: 0.7em;
+  margin-left: .7em
 }
 
 #controls .dial-holder .setting3 {
-  top: 3.15em;
+  top: 3.15em
 }
 
 #controls .dial {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center
 }
 
 #controls .dial div {
   font-size: 1em;
-  font-weight: bold;
+  font-weight: 700;
   pointer-events: none;
-  line-height: 1em;
+  line-height: 1em
 }
 
-#controls .dial-holder[data-setting="set_0"] .dial {
-  transform: rotate(-32deg);
+#controls .dial-holder[data-setting=set_0] .dial {
+  transform: rotate(-32deg)
 }
 
-#controls .dial-holder[data-setting="set_0"] .setting1 {
+#controls .dial-holder[data-setting=set_0] .setting1 {
   font-size: 1em;
   margin-left: -1.5em;
-  margin-top: -0.5em;
-  text-shadow: 0 0 12px white, 0 0 12px white, 0 0 12px white;
+  margin-top: -.5em;
+  text-shadow: 0 0 12px #fff, 0 0 12px #fff, 0 0 12px #fff
 }
 
-#controls .dial-holder[data-setting="set_1"] .dial {
-  transform: rotate(10deg);
+#controls .dial-holder[data-setting=set_1] .dial {
+  transform: rotate(10deg)
 }
 
-#controls .dial-holder[data-setting="set_1"] .setting2 {
+#controls .dial-holder[data-setting=set_1] .setting2 {
   font-size: 1em;
   margin-top: -1.25em;
   margin-left: -1.25em;
-  text-shadow: 0 0 12px white, 0 0 12px white, 0 0 12px white;
+  text-shadow: 0 0 12px #fff, 0 0 12px #fff, 0 0 12px #fff
 }
 
-#controls .dial-holder[data-setting="set_2"] .dial {
-  transform: rotate(50deg);
+#controls .dial-holder[data-setting=set_2] .dial {
+  transform: rotate(50deg)
 }
 
-#controls .dial-holder[data-setting="set_2"] .setting3 {
+#controls .dial-holder[data-setting=set_2] .setting3 {
   font-size: 1em;
   margin-left: -1.75em;
   margin-top: -1.5em;
-  text-shadow: 0 0 12px white, 0 0 12px white, 0 0 12px white;
+  text-shadow: 0 0 12px #fff, 0 0 12px #fff, 0 0 12px #fff
 }
 
 #controls .dial {
   position: absolute;
-  font-size: 0.75em;
+  font-size: .75em;
   top: 1.4em;
-  left: 0.2em;
-  margin-top: -0.9em;
+  left: .2em;
+  margin-top: -.9em;
   width: 1.8em;
   height: 1.8em;
   border-radius: 100%;
   background: #ccc;
   transform-origin: 50% 50%;
-  transition: transform 0.4s ease;
-  border: 2px solid black;
-  box-shadow: inset 0 0 10px #333, 0 0 10px #222;
+  transition: transform .4s ease;
+  border: 2px solid #000;
+  box-shadow: inset 0 0 10px #333, 0 0 10px #222
 }
 
 #controls .dial:before {
   content: "";
   font-size: 1.5em;
-  top: 0.2em;
-  right: -0.45em;
+  top: .2em;
+  right: -.45em;
   position: absolute;
-  border-top: 0.25em solid transparent;
-  border-bottom: 0.25em solid transparent;
-  border-left: 0.5em solid black;
-  transform: rotate(-10deg);
+  border-top: .25em solid transparent;
+  border-bottom: .25em solid transparent;
+  border-left: .5em solid #000;
+  transform: rotate(-10deg)
 }
 
 #game-holder {
   width: 500px;
   height: 400px;
-  margin: 0 auto;
+  margin: 0 auto
 }
 
 .game #score {
   font-size: 10em;
   text-align: center;
-  color: rgba(255, 255, 255, 0.3);
-  position: absolute;
+  color: rgba(255, 255, 255, .2);
+  position: absolute
 }
 
 .game-instruction {
@@ -808,28 +793,29 @@ h2 {
   white-space: nowrap;
   width: 80%;
   font-family: Arial, sans-serif;
-  margin: 0 auto;
+  margin: 0 auto
 }
 
 .game-instruction .attn {
   font-size: 2.5em;
-      color: #666666;
-      display: inline-block;
-      position: absolute;
-      left: 0;
+  color: #666;
+  display: inline-block;
+  position: absolute;
+  left: 0
 }
 
 #first-emo {
   line-height: 1.5em;
   font-size: 4em;
-  margin: 0 0.3em;
+  margin: 0 .3em;
   background: #a3a3a3;
-  border-radius: 5px;
+  border-radius: 5px
 }
 
 #findTheJack.game {
-  font-size: 45px;
+  font-size: 45px
 }
+
 #findTheJack .piece {
   position: absolute;
   transform-style: preserve-3d;
@@ -838,7 +824,7 @@ h2 {
   transition: transform 1s ease;
   top: 0;
   left: 0;
-  background: none;
+  background: 0 0
 }
 
 #findTheJack .card {
@@ -855,47 +841,64 @@ h2 {
   transform: rotate3d(-1, 1, 0, 180deg);
   transform-style: preserve-3d;
   cursor: pointer;
-  transition: transform 0.5s ease, background-color 0.5s ease;
+  transition: transform .5s ease, background-color .5s ease
 }
 
 #findTheJack .white .card {
-  background: white;
+  background: #fff
 }
+
 #findTheJack .variant .card {
   background: #444;
-  border-color: #444;
+  border-color: #444
+}
+
+#findTheJack .select.piece:before {
+  content: 'click';
+  color: #aaa;
+  position: absolute;
+  left: 0;
+  font-size: 0.5em;
+  width: 100%;
+  text-align: center;
+  bottom: 10px;
+  pointer-events: none;
 }
 
 #findTheJack .card.clicked {
   pointer-events: none;
   transform: rotate3d(-1, 1, 0, 0deg) scale(1.15);
-  z-index: 1;
+  z-index: 1
 }
+
 #findTheJack .card.clicked.winner {
-  box-shadow: 0 0 10px white, 0 0 10px white, 0 0 10px white;
-  border-color: white;
-  background: white;
+  box-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
+  border-color: #fff;
+  background: #fff
 }
+
 #findTheJack .card div {
-  transform: translateZ(5px);
+  transform: translateZ(5px)
 }
+
 #findTheJack .card.clicked.winner.fadeOut {
   box-shadow: none;
-  border-color: white;
+  border-color: #fff;
   filter: none;
   z-index: 10;
-  transform: scale(0.8);
-  background: white;
+  transform: scale(.8);
+  background: #fff
 }
+
 #findTheJack .card.clicked.fadeOut {
-  transform: scale(0.8);
+  transform: scale(.8);
   background: #333;
-  border-color: #333;
+  border-color: #333
 }
 
 .not-playing {
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none
 }
 
 #timer-holder {
@@ -905,16 +908,20 @@ h2 {
   height: 100%;
   top: 0;
   left: 0;
-  transition: opacity 0.5s ease;
-  filter: blur(2px);
+  transition: opacity .5s ease;
+  filter: blur(2px)
 }
 
 svg#timer {
   width: 100%;
-  height: 100%;
+  height: 100%
 }
 
 #timer #timer-path {
   stroke-linejoin: round;
-  stroke: #11c85e;
+  stroke: #11c85e
+}
+
+.game-instruction:first-letter {
+  font-size: 1.5em;
 }

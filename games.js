@@ -1,22 +1,23 @@
-const emojis = ["🐵","🐶","🐺","🦊","🐱","🦁","🐯",
-"🐴","🦄","🐮","🐷","🐗","🐭","🐁",
-"🐀","🐹","🐰","🦇","🐻","🐨","🐼",
-"🐔","🐸","🐲","🐳","🐬","🐠",
-"🐚","🦋","🐌","🐜","🐞","🌸","🥀",
-"🌳","🌴","🌵","🍁","🍇","🍉","🍊",
-"🍋","🍌","🍍","🍎","🍏","🍐","🍑",
-"🍒","🍓","🥝","🍅","🥥","🥑","🍆",
-"🥔","🥕","🌽","🥒","🍄","🥜","🌰",
-"🥐","🥖","🥞","🧀","🍗","🥓","🍔",
-"🍟","🍕","🌭","🌮","🥗","🍤","🍦",
-"🍩","🍪","🍰","🍫","🍬","🍭",
-"👦🏻","👦🏼","👦🏽","👦🏾","👦🏿","👧🏻","👧🏼",
-"👧🏽","👧🏾","👧🏿","👨🏻","👨🏼","👨🏽","👨🏾",
-"👨🏿","👩🏻","👩🏼","👩🏽","👩🏾","👩🏿","👴🏻",
-"👴🏼","👴🏽","👴🏾","👴🏿","👵🏻","👵🏼","👵🏽",
-"👵🏾","👵🏿","👶🏻","👶🏼","👶🏽","👶🏾","👶🏿",
-"👠","👽","🧠","🌎","🎹","🎻",
-"🎷","🎺","🎸","🥁"];
+const emojis = ["🐵", "🐶", "🐺", "🦊", "🐱", "🦁", "🐯",
+  "🐴", "🦄", "🐮", "🐷", "🐗", "🐭", "🐁",
+  "🐀", "🐹", "🐰", "🦇", "🐻", "🐨", "🐼",
+  "🐔", "🐸", "🐲", "🐳", "🐬", "🐠",
+  "🐚", "🦋", "🐌", "🐜", "🐞", "🌸", "🥀",
+  "🌳", "🌴", "🌵", "🍁", "🍇", "🍉", "🍊",
+  "🍋", "🍌", "🍍", "🍎", "🍏", "🍐", "🍑",
+  "🍒", "🍓", "🥝", "🍅", "🥥", "🥑", "🍆",
+  "🥔", "🥕", "🌽", "🥒", "🍄", "🥜", "🌰",
+  "🥐", "🥖", "🥞", "🧀", "🍗", "🥓", "🍔",
+  "🍟", "🍕", "🌭", "🌮", "🥗", "🍤", "🍦",
+  "🍩", "🍪", "🍰", "🍫", "🍬", "🍭",
+  "👦🏻", "👦🏼", "👦🏽", "👦🏾", "👦🏿", "👧🏻", "👧🏼",
+  "👧🏽", "👧🏾", "👧🏿", "👨🏻", "👨🏼", "👨🏽", "👨🏾",
+  "👨🏿", "👩🏻", "👩🏼", "👩🏽", "👩🏾", "👩🏿", "👴🏻",
+  "👴🏼", "👴🏽", "👴🏾", "👴🏿", "👵🏻", "👵🏼", "👵🏽",
+  "👵🏾", "👵🏿", "👶🏻", "👶🏼", "👶🏽", "👶🏾", "👶🏿",
+  "👠", "👽", "🧠", "🌎", "🎹", "🎻",
+  "🎷", "🎺", "🎸", "🥁"
+];
 const remoji = (length) => {
   let arr = [];
 
@@ -84,7 +85,7 @@ class game {
       let current = +new Date();
       if (this.paused) {
         last = current;
-        this.timePath.setAttribute("stroke-dashoffset", (rate * 5329).toFixed(1));
+        this.timePath.setAttribute("stroke-dashoffset", (rate * 5307).toFixed(1));
         requestAnimationFrame(step);
         return;
       }
@@ -103,7 +104,7 @@ class game {
 
       } else {
         rate = 1 - remaining / duration;
-        this.timePath.setAttribute("stroke-dashoffset", (rate * 5329).toFixed(1));
+        this.timePath.setAttribute("stroke-dashoffset", (rate * 5307).toFixed(1));
       }
 
       requestAnimationFrame(step);
@@ -124,7 +125,7 @@ class game {
 }
 
 class controls extends game {
-  constructor(container, difficulty = 20, target = 5, id = "controls", info = `Use any controls to make this sequence`) {
+  constructor(container, difficulty = 20, target = 5, id = "controls", info = `Use any controls to make this sequence:`) {
     target = Math.min(Math.ceil(target * 0.25), 4);
     difficulty = Math.max(difficulty, 1) * 1.3;
     super(container, difficulty, target, id, info);
@@ -138,7 +139,7 @@ class controls extends game {
       ["💀", "⚰️", "🧟", "👻"],
       ["👂", "👁️", "👄", "👃"],
       ["동", "서", "문", "답"],
-      ["🐵","🙈","🙉","🙊"],
+      ["🐵", "🙈", "🙉", "🙊"],
     ];
 
     this.resets = [];
@@ -146,7 +147,7 @@ class controls extends game {
     this.setup();
   }
 
-  end(winner) {
+  end(winner, icon = '') {
     this.paused = true;
     this.playing = false;
     if (winner) {
@@ -160,17 +161,18 @@ class controls extends game {
       }, 1000);
     } else {
       this.disable();
-      this.instructions.innerText = "Incomplete";
+      say(`Error: You clicked ${icon} not ${this.targetSeq[0]}`);
+      this.instructions.innerHTML = `You clicked ${icon} not ${this.targetSeq[0]}`;
 
       [].forEach.call(document.querySelectorAll("#controls .control"), (c) => {
-        c.style.transition = 'all 1s ease';
-        c.style.transform = `translate3d(${~~(Math.random() * 300) - 150 }px, ${~~(Math.random() * 300) + 400 }px, 0)
-          rotateZ(${~~(Math.random() * 200) - 100 }deg)`;
+        c.style.transition = 'all 2s ease';
+        c.style.transform = `translate3d(${~~(Math.random() * 300) - 150 }px, ${~~(Math.random() * 300) + 500 }px, 0)
+          rotateZ(${~~(Math.random() * 400) - 200 }deg)`;
       });
 
       setTimeout(() => {
         super.end(false);
-      }, 1000);
+      }, 2000);
     }
   }
 
@@ -203,7 +205,7 @@ class controls extends game {
           this.instructions.innerHTML = "<span class='attn'>➭</span>  " + this.targetSeq.join(", ");
         }
       } else {
-        this.end(false);
+        this.end(false, icon);
       }
     }
   }
@@ -469,11 +471,11 @@ class controls extends game {
 }
 
 class controls2 extends controls {
-    constructor(container, difficulty = 20, target = 5) {
-      target = Math.min(Math.ceil(target * 0.2), 3);
-      difficulty = Math.max(difficulty, 1);
-      super(container, difficulty, target, "controls", `Press the buttons to make this sequence`);
-    }
+  constructor(container, difficulty = 20, target = 5) {
+    target = Math.min(Math.ceil(target * 0.2), 3);
+    difficulty = Math.max(difficulty, 1);
+    super(container, difficulty, target, "controls", `Press the buttons to make this sequence:`);
+  }
   newControl() {
     return this.makeKeyPad();
   }
@@ -604,7 +606,7 @@ class taptap extends game {
   constructor(container, difficulty, target) {
     difficulty = Math.max(difficulty, 1) * 5;
     target = Math.min(~~(Math.random() * target * 2) + 2, (~~(Math.random() * 20) + 2));
-    super(container, difficulty, target, 'taptap', `Click on any ${target} ♥️ - Avoid the 💣`);
+    super(container, difficulty, target, 'taptap', `Click on any ${target} hearts - Avoid the 💣`);
   }
 
   addPiece() {
@@ -618,7 +620,7 @@ class taptap extends game {
     piece.classList.add("piece");
     piece.classList.add(left ? "left" : "right");
     piece.classList.add(bad ? "bad" : "good");
-    piece.innerHTML = bad ? '<div>💣</div>' : ['🧡', '💛', '💚', '💙', '💜', '🖤', '❤️'][~~(Math.random()* 7)];
+    piece.innerHTML = bad ? '<div>💣</div>' : ['🧡', '💛', '💚', '💙', '💜', '🖤', '❤️'][~~(Math.random() * 7)];
     this.game.appendChild(piece);
     piece.style = `transform: translateY(${(Math.random() * 600) - 300}px) translateX(${
       left ? -20 : 20
@@ -741,16 +743,11 @@ class findTheJack extends game {
   }
 
   addScore(plus = 1) {
-    this.current += plus;
-    this.score.innerText = this.current;
+    this.score.innerText = 1;
 
-    if (this.current >= this.target) {
-      this.playing = false;
-      this.paused = true;
-      setTimeout(() => {
-        this.end(true);
-      }, 1000);
-    }
+    setTimeout(() => {
+      this.end(true);
+    }, 1000);
   }
 
   squareCards() {
@@ -772,7 +769,7 @@ class findTheJack extends game {
           200,
           400
         )}px) rotateZ(${~~(Math.random()* 360)-180}deg) scale(${0.5 + Math.random()});`;
-        c.classList.toggle(Math.random() > 0.8 ? 'variant': 'white');
+        c.classList.toggle(Math.random() > 0.8 ? 'variant' : 'white');
       }, Math.random() * i * shuffleTime);
     });
 
@@ -797,8 +794,8 @@ class findTheJack extends game {
   setup() {
     this.square = Math.min(1 + config.currentLevel, 6);
     this.cards = [];
-    this.winning = '🗝️';
-    this.emos = ['Ɣ'];
+    this.winning = '🔑';
+    this.emos = ['🔒'];
     this.instructions.innerHTML = `Find any ${this.winning}: ` + (this.tries > 1 ? `${this.tries} rounds remaining.` : 'Last Round');
     const winNum = Math.min(~~(this.square * this.square * 0.5), ~~randBetween(1, (Math.pow(this.square, 2) - 2) / (Math.random() * this.difficulty)));
     const loseNum = Math.pow(this.square, 2) - winNum;

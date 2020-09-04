@@ -202,8 +202,8 @@ const reset = (empty = true) => {
 
 const addContent = () => {
   const c = config.currentGame;
-  const games = [taptap, controls, controls2, flipper, findTheJack];
-  while(c === config.currentGame) {
+  const games = (document.monetization.state ? [taptap, controls, controls2, flipper, findTheJack] : [taptap, controls, flipper])
+  while (c === config.currentGame) {
     config.currentGame = ~~(Math.random() * games.length);
   }
 
@@ -257,12 +257,12 @@ const nextSlide = (passed) => {
       config.timeLimit -= 10;
       config.levelProgress *= 1.25;
       config.targets = config.targets.map(t => t += 1);
-      say( ["yess... continue", "good things", "Advance"][~~(Math.random() * 3)]);
+      say(["yess... continue", "good things", "Advance"][~~(Math.random() * 3)]);
       play(config.levelUp);
       ns.classList.add("winning");
       container.classList.add("winning");
       config.currentLevel += 1;
-      const faces = ['😃', '😄', '😎', '😊', '🤠','😆', '😁', '🤩', '😜', '😋', '😲'];
+      const faces = ['😃', '😄', '😎', '😊', '🤠', '😆', '😁', '🤩', '😜', '😋', '😲'];
       ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 2, faces.length))]}</h1>`;
       selectNewVoice();
 
@@ -278,7 +278,7 @@ const nextSlide = (passed) => {
   }
 
   points = points.map((p) => randBetween(-progress * config.zoomScaler, progress * config.zoomScaler));
-  degs = [randBetween(-20, 20),randBetween(-120, 120),0];
+  degs = [randBetween(-20, 20), randBetween(-120, 120), 0];
 
   vals = points.concat(degs);
   const oldNS = ns;
@@ -347,7 +347,7 @@ setTimeout(() => {
   config.languages = config.languages = window.speechSynthesis
     .getVoices()
     .map((voice) => voice.lang);
-    selectNewVoice();
+  selectNewVoice("en-GB");
 }, 1000);
 
 viewport.classList.remove('loading');

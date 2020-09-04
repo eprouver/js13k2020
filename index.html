@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0; user-scalable=yes;">
   <meta name="monetization" content="$ilp.uphold.com/njQnNZy68WNK">
-  <title>JS13K</title>
+  <title>Big Moive Hacker</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -29,7 +29,6 @@
         <feBlend in="blend" in2="b" mode="lighten" result="blend" />
       </filter>
     </defs>
-
     <path id="timer-path" d="M315 71l-1-62h-56v29h33l4-16H182v20l-32-1V2h-23v12h40v13H63V10L10 9 9 83h29V23H23v138h16v19H7l5 22h26v30H8v-20h16v82h14l1 75H9v-21s2-27 0-27h16v116H8v42l32 2-1-19H23v103l43 3c0 1 0 23-1 22H7v-10h87v-19h73v29h26v-27h26v15h89v-17h-41v31h103l-1-22h41v-16l36 8s0 24-1 23c1 1 27-3 27-2l-1-23h31v32h-17l-1-18h83v16h42v-33h-27v21h107v-61l-29 1-1 72h19V469h-20v22h32v-54h-31v-68h32v-26h-32v-63h29v41h-18v-84h16v-19h-29v-25h33v-35c0 2-31 0-32 0v-38h30l1 20-17-1-1-78h-15v24l32-3 2-78h-81v38l65-1-1-20-82 1-1-15-27-1v37h-20V19l-45-1v23h-45l6-38 23 6-1 16h-49v17h-26V7h-26v26c0 1 2 44-4 39"
     stroke-opacity="null" stroke-dasharray="5307.3" stroke-dashoffset="0" stroke-width="3" fill="none"/></svg>
 </div>
@@ -40,7 +39,7 @@
       <h2 class="glitch" onclick="if(!isMobile) { document.body.classList.toggle('glitch'); }">90's Movie Hacker</h2>
       <p>The system has been hacked!</p>
       <p>Solve the puzzles before you're blocked.</p>
-      <p>Find and destroy the <strong style="font-size: 1.2em">&ldquo;404 - null pointers&rdquo;</strong>.</p>
+      <p>Destroy the <strong style="font-size: 1.2em">&ldquo;404 - null pointers&rdquo;</strong>.</p>
       <p>You're the best hacker we've got in this movie!</p>
       <button id="start-button" onclick="viewport.style = viewportTransform([1000,0,0,0,90,90]); play(config.loadMusic);">Next</button>
       <a class="toggle-sound" onclick="toggleSound()">🔊</a>
@@ -48,8 +47,8 @@
 
     <div class="slide playing instructions" style="transform: translate(-50%, -50%) translate3d(1000px, 0px, 0px) rotateX(0deg) rotateY(90deg) rotateZ(90deg);">
       <p id="first-emo">👨🏽‍💻 ⇆ 👩🏿‍💻</p>
-      <p>Become a <strong><a href="https://coil.com/explore" target="_BLANK">Coil</a></strong> member to support creators.</p>
-      <p>Good Luck!</p>
+      <p id="monetization">Get <strong><a href="https://coil.com/explore" target="_BLANK">Coil</a></strong> to support creators.</p>
+      <p><strong><a href="https://coil.com/explore" target="_BLANK">Coil</a></strong> members get extra minigames!</p>
       <button id="start-button" onclick="reset(true); nextSlide();  play(config.start);">Let's Go!</button><br/><br/>
       <p><small><a href="./gameTest.html">Practice the Games</a></small></p>
       <a class="toggle-sound" onclick="toggleSound()">🔊</a>
@@ -63,7 +62,7 @@
   </div>
 </div>
 
-<a class="toggle-sound" onclick="toggleSound()">🔊</a>
+<a class="toggle-sound" onclick="toggleSound()"><span id="level-voice"></span> 🔊</a>
 
 <!-- partial -->
   <script src="./shared.js"></script>

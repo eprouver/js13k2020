@@ -1,4 +1,16 @@
 let isMobile = false;
+if (typeof window.orientation !== 'undefined') {
+  isMobile = true;
+}
+
+if (document.monetization&&document.monetization.state) {
+  document.getElementById('monetization').style.display = 'none';
+}
+
+const viewport = document.getElementById("viewport");
+const container = document.getElementById("container");
+const searching = document.getElementById("searching");
+
 const config = {
   height: 600,
   width: 700,
@@ -8,16 +20,16 @@ const config = {
   block: [, , , , , 21, , 21, , 24],
   levelUp: [, , , 12, , , 9, , 9, , , 7, , 4, 5, 4],
   start: [, , 21, , 16, , 12, , 9, 7, 4],
-  explode: [,25,24,25,24,25,24,25],
+  explode: [, 25, 24, 25, 24, 25, 24, 25],
   winProgress: 700,
   startProgress: 1300,
-  zoomScaler: isMobile ? 0.8 : 1.5,
+  zoomScaler: 1.5,
   progressDecay: 0.9,
   endingSpeed: 200,
   explodeScale: 2300,
   languages: [],
-  difficulties: [1, 1, 2],
-  targets: [1, 1, 1],
+  difficulties: [1, 1, 1, 1, 1],
+  targets: [1, 1, 1, 1, 1],
   diftimes: 1.55,
   tartimes: 1.75,
   levelProgress: 2000,
@@ -25,22 +37,14 @@ const config = {
   currentLevel: 1,
 };
 
-if (typeof window.orientation !== 'undefined') {
-  isMobile = true;
-}
-
-const viewport = document.getElementById("viewport");
-const container = document.getElementById("container");
-const searching = document.getElementById("searching");
-
 const randBetween = (min, max) => {
   return ~~(Math.random() * (max - min + 1) + min);
 };
 
 const removeAllChildren = (parent) => {
-    while (parent.firstChild) {
-      parent.removeChild(parent.firstChild);
-    }
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
 };
 
 let sound = true;
@@ -53,17 +57,18 @@ const toggleSound = () => {
   });
 };
 
-const selectNewVoice = () => {
-  const oldLang = config.lang;
+const selectNewVoice = (specific) => {
+  if (!sound || isMobile) return;
+  const oldLang = specific ? -1 : config.lang;
   let tries = 0;
 
-  while(config.lang === oldLang && tries < 3){
+  while (config.lang === oldLang && tries < 3) {
     tries++;
-    config.lang = config.languages[randBetween(0, config.languages.length)];
+    config.lang = specific || config.languages[randBetween(0, config.languages.length)];
   }
   voice = window.speechSynthesis
-       .getVoices()
-       .filter((voice) => voice.lang.indexOf(config.lang) > -1);
+    .getVoices()
+    .filter((voice) => voice.lang.indexOf(config.lang) > -1);
   voice = voice[randBetween(0, voice.length)];
 }
 
@@ -71,7 +76,7 @@ let voice;
 selectNewVoice();
 
 let say = (m) => {
-  if (!sound) return;
+  if (!sound || isMobile) return;
   speechSynthesis.cancel();
   const msg = new SpeechSynthesisUtterance();
   msg.voice = voice;
@@ -84,7 +89,7 @@ let say = (m) => {
 };
 
 const play = (D) => {
-  if (!sound) return;
+  if (!sound || isMobile) return;
   eval(
     `with(new AudioContext)
     with(G=createGain())
@@ -119,25 +124,26 @@ document.body.addEventListener('touchend', function preventZoom(e) {
   e.target.click();
 });
 
-const emojis = ["🐵","🐶","🐺","🦊","🐱","🦁","🐯",
-"🐴","🦄","🐮","🐷","🐗","🐭","🐁",
-"🐀","🐹","🐰","🦇","🐻","🐨","🐼",
-"🐔","🐸","🐲","🐳","🐬","🐠",
-"🐚","🦋","🐌","🐜","🐞","🌸","🥀",
-"🌳","🌴","🌵","🍁","🍇","🍉","🍊",
-"🍋","🍌","🍍","🍎","🍏","🍐","🍑",
-"🍒","🍓","🥝","🍅","🥥","🥑","🍆",
-"🥔","🥕","🌽","🥒","🍄","🥜","🌰",
-"🥐","🥖","🥞","🧀","🍗","🥓","🍔",
-"🍟","🍕","🌭","🌮","🥗","🍤","🍦",
-"🍩","🍪","🍰","🍫","🍬","🍭",
-"👦🏻","👦🏼","👦🏽","👦🏾","👦🏿","👧🏻","👧🏼",
-"👧🏽","👧🏾","👧🏿","👨🏻","👨🏼","👨🏽","👨🏾",
-"👨🏿","👩🏻","👩🏼","👩🏽","👩🏾","👩🏿","👴🏻",
-"👴🏼","👴🏽","👴🏾","👴🏿","👵🏻","👵🏼","👵🏽",
-"👵🏾","👵🏿","👶🏻","👶🏼","👶🏽","👶🏾","👶🏿",
-"👠","👽","🧠","🌎","🎹","🎻",
-"🎷","🎺","🎸","🥁"];
+const emojis = ["🐵", "🐶", "🐺", "🦊", "🐱", "🦁", "🐯",
+  "🐴", "🦄", "🐮", "🐷", "🐗", "🐭", "🐁",
+  "🐀", "🐹", "🐰", "🦇", "🐻", "🐨", "🐼",
+  "🐔", "🐸", "🐲", "🐳", "🐬", "🐠",
+  "🐚", "🦋", "🐌", "🐜", "🐞", "🌸", "🥀",
+  "🌳", "🌴", "🌵", "🍁", "🍇", "🍉", "🍊",
+  "🍋", "🍌", "🍍", "🍎", "🍏", "🍐", "🍑",
+  "🍒", "🍓", "🥝", "🍅", "🥥", "🥑", "🍆",
+  "🥔", "🥕", "🌽", "🥒", "🍄", "🥜", "🌰",
+  "🥐", "🥖", "🥞", "🧀", "🍗", "🥓", "🍔",
+  "🍟", "🍕", "🌭", "🌮", "🥗", "🍤", "🍦",
+  "🍩", "🍪", "🍰", "🍫", "🍬", "🍭",
+  "👦🏻", "👦🏼", "👦🏽", "👦🏾", "👦🏿", "👧🏻", "👧🏼",
+  "👧🏽", "👧🏾", "👧🏿", "👨🏻", "👨🏼", "👨🏽", "👨🏾",
+  "👨🏿", "👩🏻", "👩🏼", "👩🏽", "👩🏾", "👩🏿", "👴🏻",
+  "👴🏼", "👴🏽", "👴🏾", "👴🏿", "👵🏻", "👵🏼", "👵🏽",
+  "👵🏾", "👵🏿", "👶🏻", "👶🏼", "👶🏽", "👶🏾", "👶🏿",
+  "👠", "👽", "🧠", "🌎", "🎹", "🎻",
+  "🎷", "🎺", "🎸", "🥁"
+];
 const remoji = (length) => {
   let arr = [];
 
@@ -205,7 +211,7 @@ class game {
       let current = +new Date();
       if (this.paused) {
         last = current;
-        this.timePath.setAttribute("stroke-dashoffset", (rate * 5329).toFixed(1));
+        this.timePath.setAttribute("stroke-dashoffset", (rate * 5307).toFixed(1));
         requestAnimationFrame(step);
         return;
       }
@@ -219,12 +225,14 @@ class game {
         this.timer.classList.add('not-playing');
         this.timePath.setAttribute("stroke-dashoffset", 0);
         if (!this.playing) return;
-        this.end(false);
+        this.playing = false;
+        say("Time");
+        this.end(false, 'time');
         return;
 
       } else {
         rate = 1 - remaining / duration;
-        this.timePath.setAttribute("stroke-dashoffset", (rate * 5329).toFixed(1));
+        this.timePath.setAttribute("stroke-dashoffset", (rate * 5307).toFixed(1));
       }
 
       requestAnimationFrame(step);
@@ -245,7 +253,7 @@ class game {
 }
 
 class controls extends game {
-  constructor(container, difficulty = 20, target = 5, id = "controls", info = `Use any controls to make this sequence`) {
+  constructor(container, difficulty = 20, target = 5, id = "controls", info = `Use any controls to make this sequence:`) {
     target = Math.min(Math.ceil(target * 0.25), 4);
     difficulty = Math.max(difficulty, 1) * 1.3;
     super(container, difficulty, target, id, info);
@@ -259,7 +267,7 @@ class controls extends game {
       ["💀", "⚰️", "🧟", "👻"],
       ["👂", "👁️", "👄", "👃"],
       ["동", "서", "문", "답"],
-      ["🐵","🙈","🙉","🙊"],
+      ["🐵", "🙈", "🙉", "🙊"],
     ];
 
     this.resets = [];
@@ -267,7 +275,7 @@ class controls extends game {
     this.setup();
   }
 
-  end(winner) {
+  end(winner, icon = '') {
     this.paused = true;
     this.playing = false;
     if (winner) {
@@ -281,17 +289,22 @@ class controls extends game {
       }, 1000);
     } else {
       this.disable();
-      this.instructions.innerText = "Incomplete";
+      if (icon === 'time') {
+        this.instructions.innerHTML = "Time's up!";
+      } else {
+        say(`Error: You clicked ${icon} not ${this.targetSeq[0]}`);
+        this.instructions.innerHTML = `You clicked ${icon} not ${this.targetSeq[0]}`;
+      }
 
       [].forEach.call(document.querySelectorAll("#controls .control"), (c) => {
-        c.style.transition = 'all 1s ease';
-        c.style.transform = `translate3d(${~~(Math.random() * 300) - 150 }px, ${~~(Math.random() * 300) + 400 }px, 0)
-          rotateZ(${~~(Math.random() * 200) - 100 }deg)`;
+        c.style.transition = 'all 2s ease';
+        c.style.transform = `translate3d(${~~(Math.random() * 300) - 150 }px, ${~~(Math.random() * 300) + 500 }px, 0)
+          rotateZ(${~~(Math.random() * 400) - 200 }deg)`;
       });
 
       setTimeout(() => {
         super.end(false);
-      }, 1000);
+      }, 2000);
     }
   }
 
@@ -324,7 +337,7 @@ class controls extends game {
           this.instructions.innerHTML = "<span class='attn'>➭</span>  " + this.targetSeq.join(", ");
         }
       } else {
-        this.end(false);
+        this.end(false, icon);
       }
     }
   }
@@ -590,11 +603,11 @@ class controls extends game {
 }
 
 class controls2 extends controls {
-    constructor(container, difficulty = 20, target = 5) {
-      target = Math.min(Math.ceil(target * 0.2), 3);
-      difficulty = Math.max(difficulty, 1);
-      super(container, difficulty, target, "controls", `Press the buttons to make this sequence`);
-    }
+  constructor(container, difficulty = 20, target = 5) {
+    target = Math.min(Math.ceil(target * 0.2), 3);
+    difficulty = Math.max(difficulty, 1);
+    super(container, difficulty, target, "controls", `Press the buttons to make this sequence:`);
+  }
   newControl() {
     return this.makeKeyPad();
   }
@@ -627,12 +640,7 @@ class flipper extends game {
       piece = this.cards[~~(Math.random() * this.cards.length)];
     }
     const div = document.createElement("div");
-    div.innerHTML = `<svg
-    width="100%" height="100%"
-    viewBox="-50 -50 100 75"
-    xmlns="http://www.w3.org/2000/svg"
-  ><text x="0" y="0" text-anchor="middle" font-size="50">${piece}</text>
-      </svg>`;
+    div.innerHTML = `<svg width="100%" height="100%" viewBox="-50 -50 100 75" xmlns="http://www.w3.org/2000/svg"><text x="0" y="0" text-anchor="middle" font-size="50">${piece}</text></svg>`;
     div.classList.add("piece");
     const clickstart = () => {
       say(piece);
@@ -648,11 +656,12 @@ class flipper extends game {
     const clicked = document.getElementsByClassName("clicked")[0];
     card.classList.add("clicked");
 
-    if (this.currentPiece) {
+    if (this.currentPiece && this.playing) {
       const winner = this.currentPiece == piece;
       this.currentPiece = null;
 
       setTimeout(() => {
+        if (!this.playing) return;
         this.paused = true;
         if (winner) {
           this.addScore();
@@ -725,7 +734,7 @@ class taptap extends game {
   constructor(container, difficulty, target) {
     difficulty = Math.max(difficulty, 1) * 5;
     target = Math.min(~~(Math.random() * target * 2) + 2, (~~(Math.random() * 20) + 2));
-    super(container, difficulty, target, 'taptap', `Click on any ${target} ♥️ - Avoid the 💣`);
+    super(container, difficulty, target, 'taptap', `Click on any ${target} hearts - Avoid the 💣`);
   }
 
   addPiece() {
@@ -739,7 +748,7 @@ class taptap extends game {
     piece.classList.add("piece");
     piece.classList.add(left ? "left" : "right");
     piece.classList.add(bad ? "bad" : "good");
-    piece.innerHTML = bad ? '<div>💣</div>' : ['🧡', '💛', '💚', '💙', '💜', '🖤', '❤️'][~~(Math.random()* 7)];
+    piece.innerHTML = bad ? '<div>💣</div>' : ['🧡', '💛', '💚', '💙', '💜', '🖤', '❤️'][~~(Math.random() * 7)];
     this.game.appendChild(piece);
     piece.style = `transform: translateY(${(Math.random() * 600) - 300}px) translateX(${
       left ? -20 : 20
@@ -833,10 +842,13 @@ class findTheJack extends game {
     this.disable();
     this.paused = true;
     piece.children[0].classList.add("clicked");
+    this.cards.forEach((c) => {
+      c.classList.remove("select");
+    })
 
     if (winner) {
       say('the key');
-      this.addScore();
+      this.addScore(1);
 
     } else {
       this.tries--;
@@ -862,16 +874,11 @@ class findTheJack extends game {
   }
 
   addScore(plus = 1) {
-    this.current += plus;
-    this.score.innerText = this.current;
+    this.score.innerText = 1;
 
-    if (this.current >= this.target) {
-      this.playing = false;
-      this.paused = true;
-      setTimeout(() => {
-        this.end(true);
-      }, 1000);
-    }
+    setTimeout(() => {
+      this.end(true);
+    }, 1000);
   }
 
   squareCards() {
@@ -893,7 +900,7 @@ class findTheJack extends game {
           200,
           400
         )}px) rotateZ(${~~(Math.random()* 360)-180}deg) scale(${0.5 + Math.random()});`;
-        c.classList.toggle(Math.random() > 0.8 ? 'variant': 'white');
+        c.classList.toggle(Math.random() > 0.8 ? 'variant' : 'white');
       }, Math.random() * i * shuffleTime);
     });
 
@@ -905,8 +912,7 @@ class findTheJack extends game {
     } else {
       setTimeout(() => {
         this.cards = this.cards.sort(() => (Math.random() > 0.5 ? 1 : -1));
-        this.cards.forEach(c => c.classList.remove('white'));
-        this.cards.forEach(c => c.classList.remove('variant'));
+        this.cards.forEach(c => { c.classList.remove('white'); c.classList.remove('variant'); c.classList.add('select'); });
         this.squareCards();
         say('select');
         this.disable(false);
@@ -918,8 +924,8 @@ class findTheJack extends game {
   setup() {
     this.square = Math.min(1 + config.currentLevel, 6);
     this.cards = [];
-    this.winning = '🗝️';
-    this.emos = ['Ɣ'];
+    this.winning = '🔑';
+    this.emos = ['🔒'];
     this.instructions.innerHTML = `Find any ${this.winning}: ` + (this.tries > 1 ? `${this.tries} rounds remaining.` : 'Last Round');
     const winNum = Math.min(~~(this.square * this.square * 0.5), ~~randBetween(1, (Math.pow(this.square, 2) - 2) / (Math.random() * this.difficulty)));
     const loseNum = Math.pow(this.square, 2) - winNum;
@@ -960,7 +966,6 @@ class findTheJack extends game {
     }, winners.length * 100 + 3500);
   }
 }
-
 
 /* Start Minimap */
 const bar = document.getElementById('bar');
@@ -1090,18 +1095,7 @@ function explode(c, times = 3) {
 
   setTimeout(function() {
     [].forEach.call(document.querySelectorAll("canvas.explode-copy"), (v, i) => {
-      v.style = `transition-duration: ${(Math.random() * 5000) + 500}ms;
-      filter: hue-rotate(380deg) brightness(2) saturate(0.2);
-      transform:
-      translate3d(${randBetween(-config.explodeScale, config.explodeScale)}px,
-       ${randBetween(-config.explodeScale, config.explodeScale)}px,
-        ${randBetween(-config.explodeScale, config.explodeScale * 3)}px)
-        rotateX(${randBetween(-100, 100)}deg)
-        rotateY(${randBetween(-100, 100)}deg)
-        rotateZ(${randBetween(-100, 100)}deg)
-
-        ;
-      opacity: 0;`;
+      v.style = `transition-duration: ${(Math.random() * 5000) + 500}ms;filter: hue-rotate(380deg) brightness(2) saturate(0.2);transform:translate3d(${randBetween(-config.explodeScale, config.explodeScale)}px,${randBetween(-config.explodeScale, config.explodeScale)}px, ${randBetween(-config.explodeScale, config.explodeScale * 3)}px) rotateX(${randBetween(-100, 100)}deg) rotateY(${randBetween(-100, 100)}deg) rotateZ(${randBetween(-100, 100)}deg); opacity: 0;`;
       v.addEventListener("transitionend", () => {
         v.classList.add("remove-me");
         c.classList.add("remove-me");
@@ -1166,8 +1160,8 @@ const reset = (empty = true) => {
 
 const addContent = () => {
   const c = config.currentGame;
-  const games = [taptap, controls, controls2, flipper, findTheJack];
-  while(c === config.currentGame) {
+  const games = ((document.monetization&&document.monetization.state) ? [taptap, controls, controls2, flipper, findTheJack] : [taptap, controls, flipper])
+  while (c === config.currentGame) {
     config.currentGame = ~~(Math.random() * games.length);
   }
 
@@ -1203,7 +1197,11 @@ const nextSlide = (passed) => {
     if (!passed) {
       config.timeLimit += 15;
       config.difficulties = config.difficulties.map(d => d * 0.9);
-      say("blocked");
+      config.difficulties[config.currentGame] *= 0.9;
+      config.targets[config.currentGame] *= 0.9;
+      setTimeout(() => {
+        say("blocked");
+      }, 500);
       play(config.block);
       ns.classList.add("failed");
       ns.innerHTML = "<h1>😢</h1><p>Blocked</p>";
@@ -1212,7 +1210,9 @@ const nextSlide = (passed) => {
       config.difficulties[config.currentGame] *= config.diftimes;
       config.targets[config.currentGame] *= config.tartimes;
       config.timeLimit -= 2;
-      say("for oh for. null pointer");
+      setTimeout(() => {
+        say("for oh for. null pointer");
+      }, 500);
       play(config.four);
       ns.classList.add("finished");
       ns.innerHTML = "<h1 class='glitch'>404</h1><p>You found a null pointer!</p>";
@@ -1221,12 +1221,12 @@ const nextSlide = (passed) => {
       config.timeLimit -= 10;
       config.levelProgress *= 1.25;
       config.targets = config.targets.map(t => t += 1);
-      say( ["yess... continue", "good things", "Advance"][~~(Math.random() * 3)]);
+      say(["yess... continue", "good things", "Advance"][~~(Math.random() * 3)]);
       play(config.levelUp);
       ns.classList.add("winning");
       container.classList.add("winning");
       config.currentLevel += 1;
-      const faces = ['😃', '😄', '😎', '😊', '🤠','😆', '😁', '🤩', '😜', '😋', '😲'];
+      const faces = ['😃', '😄', '😎', '😊', '🤠', '😆', '😁', '🤩', '😜', '😋', '😲'];
       ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 2, faces.length))]}</h1>`;
       selectNewVoice();
 
@@ -1242,7 +1242,7 @@ const nextSlide = (passed) => {
   }
 
   points = points.map((p) => randBetween(-progress * config.zoomScaler, progress * config.zoomScaler));
-  degs = [randBetween(-20, 20),randBetween(-120, 120),0];
+  degs = [randBetween(-20, 20), randBetween(-120, 120), 0];
 
   vals = points.concat(degs);
   const oldNS = ns;
@@ -1311,7 +1311,7 @@ setTimeout(() => {
   config.languages = config.languages = window.speechSynthesis
     .getVoices()
     .map((voice) => voice.lang);
-    selectNewVoice();
+  selectNewVoice("en-GB");
 }, 1000);
 
 viewport.classList.remove('loading');
