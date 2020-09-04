@@ -3,6 +3,7 @@ if (typeof window.orientation !== 'undefined') {
   isMobile = true;
 }
 
+document.monetization = { state: true };
 if (document.monetization&&document.monetization.state) {
   document.getElementById('monetization').style.display = 'none';
 }
@@ -281,6 +282,7 @@ class controls extends game {
     if (winner) {
       this.disable();
       this.instructions.innerText = "Unlocked!";
+      say('unlocked!');
       [].forEach.call(document.querySelectorAll("#controls .control"), (c) => {
         c.classList.add('winner')
       });
@@ -478,7 +480,7 @@ class controls extends game {
               this.instructions.innerHTML = "<span class='attn'>➭</span>  " + this.targetSeq.join(", ");
             }
           } else {
-            this.end(false);
+            this.end(false, emo);
           }
         }, false);
       });
@@ -744,7 +746,7 @@ class taptap extends game {
 
     const piece = document.createElement("a");
     const left = Math.random() > 0.5;
-    const bad = Math.random() > 0.5;
+    const bad = Math.random() > 0.6;
     piece.classList.add("piece");
     piece.classList.add(left ? "left" : "right");
     piece.classList.add(bad ? "bad" : "good");
@@ -798,7 +800,7 @@ class findTheJack extends game {
     target = Math.min(Math.ceil(target * 0.25), 4);
     difficulty = Math.max(difficulty, 1) * 1.3;
     const tries = Math.max(1, ~~(4 - config.currentLevel * 0.3));
-    super(container, difficulty, target, "findTheJack", `${tries} tries to find a key`);
+    super(container, difficulty, target, "findTheJack", `Find a key`);
     this.tries = tries;
     this.disable();
   }
@@ -926,7 +928,7 @@ class findTheJack extends game {
     this.cards = [];
     this.winning = '🔑';
     this.emos = ['🔒'];
-    this.instructions.innerHTML = `Find any ${this.winning}: ` + (this.tries > 1 ? `${this.tries} rounds remaining.` : 'Last Round');
+    this.instructions.innerHTML = `Find any ${this.winning}: ` + (this.tries > 1 ? `${this.tries} tries remaining.` : 'Last Try');
     const winNum = Math.min(~~(this.square * this.square * 0.5), ~~randBetween(1, (Math.pow(this.square, 2) - 2) / (Math.random() * this.difficulty)));
     const loseNum = Math.pow(this.square, 2) - winNum;
     let i, j;
@@ -940,6 +942,9 @@ class findTheJack extends game {
     this.cards = this.cards.sort(() => (Math.random() > 0.5 ? 1 : -1));
 
     setTimeout(() => {
+      setTimeout(() => {
+        say((this.tries > 1 ? `${this.tries} tries remaining.` : 'Last Try'))
+      }, 1500);
       this.squareCards();
     }, 100);
   }
