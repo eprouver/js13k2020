@@ -381,23 +381,6 @@ class controls extends game {
     }
   }
 
-  newRow(cNum = 2) {
-    let holder,
-      cHolder,
-      i;
-    cHolder = document.createElement("div");
-    cHolder.classList.add("c-holder");
-    for (i = 0; i < cNum; i++) {
-      holder = this.newControl();
-      cHolder.append(holder);
-    }
-    if (Math.random() > 0.5) {
-      this.game.prepend(cHolder);
-    } else {
-      this.game.append(cHolder);
-    }
-  }
-
   newSequence() {
     this.game.classList.add('lock-msg');
     this.paused = true;
@@ -427,27 +410,80 @@ class controls extends game {
   }
 
   setup() {
-    this.lockmsg = document.createElement('div');
-    this.lockmsg.classList.add('locks');
-    this.game.append(this.lockmsg);
-    let thisRow, numRows = 0;
-    let numCtrls = (this.difficulty) + ~~(Math.random() * (this.difficulty / this.target)) + (config.currentLevel * 0.35);
+    let thisRow,
+      numRows = 0;
+    const table = document.createElement("table");
+    this.game.append(table);
+    let numCtrls =
+      ~~(Math.random() * this.difficulty * 0.5) +
+      ~~(Math.random() * this.difficulty * 0.25) +
+      2;
     this.keypad = false;
+
+    const addConts = [];
 
     while (numCtrls > 0 && numRows < 5) {
       thisRow = Math.min(~~(Math.random() * (numCtrls * 0.9)) + 1, 6);
-      if (thisRow > numCtrls) thisRow = numCtrls;
+      if (thisRow > numCtrls) {
+        thisRow = numCtrls;
+      }
 
-      this.newRow(thisRow);
-      numCtrls -= thisRow;
-      numRows++;
+      for (let i = 0; i < thisRow; i++) {
+        const two = remoji(2);
+        const three = remoji(3);
+        addConts.push(this.newControl(two, three));
+        numRows++;
+      }
     }
+
+    const rowsNum = nearSquare(addConts.length);
+    const cells = [];
+
+    for (let i = 0; i < rowsNum; i++) {
+      const row = document.createElement("tr");
+      for (let j = 0; j < rowsNum; j++) {
+        const cell = document.createElement("td");
+        row.append(cell);
+        cells.push(cell);
+      }
+      table.append(row);
+    }
+
+    let tries = 0;
+
+    while (addConts.length < cells.length && tries < 3) {
+      if (Math.random() > 0.5) {
+        let randCell = ~~(Math.random() * rowsNum);
+        const randRow = ~~(Math.random() * rowsNum) - 1;
+        randCell = randCell + randRow * randCell;
+        cells[randCell].setAttribute("colspan", 2);
+        cells[randCell + 1].remove();
+        cells.splice(randCell + 1, 1);
+      } else {
+        const randCell = ~~(Math.random() * rowsNum);
+        const randRow = ~~(Math.random() * rowsNum) - 1;
+        cells[randCell + randCell * randRow].setAttribute("rowspan", 2);
+        if (cells[randCell + randCell * randRow + rowsNum - 1]) {
+          cells[randCell + randCell * randRow + rowsNum - 1].remove();
+          cells.splice(randCell + randCell * randRow + rowsNum - 1, 1);
+        }
+      }
+      tries++;
+    }
+
+    cells.forEach((c, i) => {
+      if (addConts[i]) {
+        c.append(addConts[i]);
+      } else {
+        c.remove();
+      }
+    });
 
 
     [].forEach.call(
       document.querySelectorAll("#controls .control"),
       (control) => {
-        const rect = control.getBoundingClientRect();
+        const rect = control.parentElementgetBoundingClientRect();
         const small = Math.min(control.offsetWidth, control.offsetHeight);
         control.style.fontSize = `${(small / 2)}px`;
       }
@@ -649,6 +685,7 @@ class taptap extends game {
     } else {
       this.current += 1;
       this.score.innerText = this.current;
+      say(this.current);
       if (this.current >= this.target) {
         this.end(true);
       }

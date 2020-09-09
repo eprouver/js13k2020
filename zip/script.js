@@ -60,7 +60,7 @@ const toggleSound = () => {
 
 const selectNewVoice = (specific) => {
   if (!sound || isMobile) return;
-  const oldLang = specific ? -1 : config.lang;
+  const oldLang = config.lang;
   let tries = 0;
 
   while (config.lang === oldLang && tries < 3) {
@@ -746,7 +746,7 @@ class taptap extends game {
 
     const piece = document.createElement("a");
     const left = Math.random() > 0.5;
-    const bad = Math.random() > 0.6;
+    const bad = Math.random() > 0.55;
     piece.classList.add("piece");
     piece.classList.add(left ? "left" : "right");
     piece.classList.add(bad ? "bad" : "good");
@@ -778,6 +778,7 @@ class taptap extends game {
       this.end(false);
     } else {
       this.current += 1;
+      say(this.current);
       this.score.innerText = this.current;
       if (this.current >= this.target) {
         this.end(true);
@@ -1232,12 +1233,12 @@ const nextSlide = (passed) => {
       container.classList.add("winning");
       config.currentLevel += 1;
       const faces = ['😃', '😄', '😎', '😊', '🤠', '😆', '😁', '🤩', '😜', '😋', '😲'];
-      ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 2, faces.length))]}</h1>`;
+      ns.innerHTML = `<h1>${faces[~~randBetween(0, Math.min(config.currentLevel * 2, faces.length - 1))]}</h1>`;
       selectNewVoice();
 
       setTimeout(() => {
         say(`Welcome to Level ${config.currentLevel}`);
-        finishLeaf();
+        finishLeaf()
         reset(true);
         nextSlide();
       }, 25 * config.endingSpeed);
